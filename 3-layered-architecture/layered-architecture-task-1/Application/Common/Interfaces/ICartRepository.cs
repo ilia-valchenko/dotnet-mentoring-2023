@@ -1,11 +1,11 @@
-﻿using Application.DTOs;
+﻿using Domain.Models;
 
 namespace Application.Common.Interfaces;
 
 public interface ICartRepository
 {
-    public Task<IList<CartDto>> GetAsync(CancellationToken cancellationToken = default);
-    public Task CreateAsync(CartDto cart, CancellationToken cancellationToken = default);
-    public Task AddAsync(Guid cartId, CartItemDto itemToAdd, CancellationToken cancellationToken = default);
-    public Task RemoveAsync(Guid cartId, Guid cartItemId, CancellationToken cancellationToken = default);
+    public Task<IList<Cart>> GetAsync(CancellationToken cancellationToken = default);
+    public Task CreateAsync(Cart cart, CancellationToken cancellationToken = default);
+    public Task AddItemAsync(Guid cartId, CartItem itemToAdd, CancellationToken cancellationToken = default);
+    public Task RemoveItemAsync(Guid cartId, Guid cartItemId, CancellationToken cancellationToken = default);
 }
