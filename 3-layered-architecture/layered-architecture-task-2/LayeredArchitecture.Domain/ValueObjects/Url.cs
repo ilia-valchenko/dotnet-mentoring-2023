@@ -7,6 +7,17 @@ namespace LayeredArchitecture.Domain.ValueObjects
     {
         private string _urlText = string.Empty;
 
+        public Url(string urlText)
+        {
+            this.UrlText = urlText;
+        }
+
+        public Url(string urlText, string altText)
+        {
+            this.UrlText = urlText;
+            this.AltText = altText;
+        }
+
         public string AltText { get; set; }
 
         public string UrlText

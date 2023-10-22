@@ -8,10 +8,10 @@ namespace LayeredArchitecture.UseCase
 {
     public interface IRepository
     {
-        Task<Category> GetAsync(Guid id, CancellationToken cancellationToken);
-        Task<IList<Category>> GetAsync(CancellationToken cancellationToken);
-        Task CreateAsync(Category category, CancellationToken cancellationToken);
-        Task UpdateAsync(Category category, CancellationToken cancellationToken);
-        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<Category> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<IList<Category>> GetAsync(CancellationToken cancellationToken = default);
+        Task CreateAsync(Category category, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Category category, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

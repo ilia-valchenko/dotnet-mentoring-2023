@@ -8,10 +8,10 @@ namespace LayeredArchitecture.UseCase.Services.Interfaces
 {
     public interface IService<T> where T : BaseDto
     {
-        Task<T> GetAsync(Guid id, CancellationToken cancellationToken);
-        Task<IList<T>> GetAsync(CancellationToken cancellationToken);
-        Task CreateAsync(T item, CancellationToken cancellationToken);
-        Task UpdateAsync(T item, CancellationToken cancellationToken);
-        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<T> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<IList<T>> GetAsync(CancellationToken cancellationToken = default);
+        Task CreateAsync(T item, CancellationToken cancellationToken = default);
+        Task UpdateAsync(T item, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

@@ -6,9 +6,9 @@ using LayeredArchitecture.UseCase.Validators.Interfaces;
 
 namespace LayeredArchitecture.UseCase.Validators
 {
-    public class Validator : IValidator<BaseDto>
+    public class Validator<T> : IValidator<T> where T : BaseDto
     {
-        public ValidationResult Validate(BaseDto item)
+        public ValidationResult Validate(T item)
         {
             if (item == null)
             {
