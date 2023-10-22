@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayeredArchitecture.Domain"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayeredArchitecture.UseCase", "LayeredArchitecture.UseCase\LayeredArchitecture.UseCase.csproj", "{80E02968-D4C3-4935-918A-B0308779A8AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayeredArchitecture.Infrastructure", "LayeredArchitecture.Infrastructure\LayeredArchitecture.Infrastructure.csproj", "{563B6414-85AF-42BC-BCA8-F28B5DECBA57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{80E02968-D4C3-4935-918A-B0308779A8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80E02968-D4C3-4935-918A-B0308779A8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80E02968-D4C3-4935-918A-B0308779A8AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{563B6414-85AF-42BC-BCA8-F28B5DECBA57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{563B6414-85AF-42BC-BCA8-F28B5DECBA57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{563B6414-85AF-42BC-BCA8-F28B5DECBA57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{563B6414-85AF-42BC-BCA8-F28B5DECBA57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

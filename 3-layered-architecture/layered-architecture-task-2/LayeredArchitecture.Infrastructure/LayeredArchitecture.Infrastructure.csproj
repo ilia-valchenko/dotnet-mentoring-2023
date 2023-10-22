@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LayeredArchitecture.Domain\LayeredArchitecture.Domain.csproj" />
+    <ProjectReference Include="..\LayeredArchitecture.UseCase\LayeredArchitecture.UseCase.csproj" />
+  </ItemGroup>
+
+</Project>
