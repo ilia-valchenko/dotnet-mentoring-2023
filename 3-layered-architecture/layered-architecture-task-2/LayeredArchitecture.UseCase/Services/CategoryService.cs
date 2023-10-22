@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using LayeredArchitecture.UseCase.DTOs;
 using LayeredArchitecture.UseCase.Services.Interfaces;
 using LayeredArchitecture.UseCase.Validators.Interfaces;
@@ -12,11 +13,13 @@ namespace LayeredArchitecture.UseCase.Services
     {
         private readonly IValidator<Category> _validator;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public CategoryService(IValidator<Category> validator, IRepository repository)
+        public CategoryService(IValidator<Category> validator, IRepository repository, IMapper mapper)
         {
             _validator = validator;
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task CreateAsync(Category item, CancellationToken cancellationToken)
@@ -28,28 +31,36 @@ namespace LayeredArchitecture.UseCase.Services
                 throw new ArgumentException("Provided category is not valid.");
             }
 
-            // Map
-            await _repository.CreateAsync(item, cancellationToken);
+            await _repository.CreateAsync(_mapper.Map<Domain.Entities.Category>(item), cancellationToken);
         }
 
-        public Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _repository.DeleteAsync(id, cancellationToken);
         }
 
-        public Task<Category> GetAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Category> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetAsync(id, cancellationToken);
+            return _mapper.Map<Category>(entity);
         }
 
-        public Task<IList<Category>> GetAsync(CancellationToken cancellationToken)
+        public async Task<IList<Category>> GetAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var entities = await _repository.GetAsync(cancellationToken);
+            return _mapper.Map<IList<Category>>(entities);
         }
 
-        public Task UpdateAsync(Category item, CancellationToken cancellationToken)
+        public async Task UpdateAsync(Category item, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var validationResult = _validator.Validate(item);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ArgumentException("Provided category is not valid.");
+            }
+
+            await _repository.UpdateAsync(_mapper.Map<Domain.Entities.Category>(item), cancellationToken);
         }
     }
 }
