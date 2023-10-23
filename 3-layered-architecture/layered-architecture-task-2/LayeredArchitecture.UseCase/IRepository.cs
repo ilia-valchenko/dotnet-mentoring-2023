@@ -6,12 +6,12 @@ using LayeredArchitecture.Domain.Entities;
 
 namespace LayeredArchitecture.UseCase
 {
-    public interface IRepository
+    public interface IRepository<T> where T : BaseEntity
     {
-        Task<Category> GetAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<IList<Category>> GetAsync(CancellationToken cancellationToken = default);
-        Task CreateAsync(Category category, CancellationToken cancellationToken = default);
-        Task UpdateAsync(Category category, CancellationToken cancellationToken = default);
+        Task<T> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<IList<T>> GetAsync(CancellationToken cancellationToken = default);
+        Task CreateAsync(T itemToCreate, CancellationToken cancellationToken = default);
+        Task UpdateAsync(T itemToUpdate, CancellationToken cancellationToken = default);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

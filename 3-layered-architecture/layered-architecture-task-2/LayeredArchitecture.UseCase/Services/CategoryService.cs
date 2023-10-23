@@ -12,10 +12,10 @@ namespace LayeredArchitecture.UseCase.Services
     public class CategoryService : IService<Category>
     {
         private readonly IValidator<Category> _validator;
-        private readonly IRepository _repository;
+        private readonly IRepository<Domain.Entities.Category> _repository;
         private readonly IMapper _mapper;
 
-        public CategoryService(IValidator<Category> validator, IRepository repository, IMapper mapper)
+        public CategoryService(IValidator<Category> validator, IRepository<Domain.Entities.Category> repository, IMapper mapper)
         {
             _validator = validator;
             _repository = repository;

@@ -11,11 +11,11 @@ using Newtonsoft.Json;
 
 namespace LayeredArchitecture.Infrastructure
 {
-    public class Repository : IRepository
+    public class CategoryRepository : IRepository<Category>
     {
         private readonly string _connectionString;
 
-        public Repository(string connectionString)
+        public CategoryRepository(string connectionString)
         {
             _connectionString = connectionString;
         }

@@ -18,7 +18,7 @@ namespace LayeredArchitecture.CommandLineInterface
             IMapperFactory mapperFactory = new MapperFactory(mapperConfigurationFactory);
             IMapper mapper = mapperFactory.CreateMapper();
             IValidator<Category> validator = new Validator<Category>();
-            IRepository repository = new Repository(connectionString);
+            IRepository<Domain.Entities.Category> repository = new CategoryRepository(connectionString);
             return new CategoryService(validator, repository, mapper);
         }
     }
