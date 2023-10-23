@@ -7,6 +7,7 @@ using Dapper;
 using LayeredArchitecture.Domain.Entities;
 using LayeredArchitecture.UseCase;
 using Microsoft.Data.Sqlite;
+using Newtonsoft.Json;
 
 namespace LayeredArchitecture.Infrastructure
 {
@@ -27,7 +28,12 @@ namespace LayeredArchitecture.Infrastructure
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             using var connection = new SqliteConnection(_connectionString);
-            await connection.ExecuteAsync("DELETE FROM Category WHERE Id = @Id", new { Id = id.ToString() });
+            var numberOfAffectedRows = await connection.ExecuteAsync("DELETE FROM Category WHERE Id = @Id", new { Id = id.ToString() });
+
+            if (numberOfAffectedRows < 1)
+            {
+                throw new Exception($"Failed to delete the category. CategoryId: '{id.ToString()}'.");
+            }
         }
 
         public async Task<Category> GetAsync(Guid id, CancellationToken cancellationToken)
@@ -47,7 +53,8 @@ namespace LayeredArchitecture.Infrastructure
         public async Task UpdateAsync(Category category, CancellationToken cancellationToken)
         {
             using var connection = new SqliteConnection(_connectionString);
-            await connection.ExecuteAsync(
+
+            var numberOfAffectedRows = await connection.ExecuteAsync(
                 "UPDATE Category SET Name = @Name, ImageUrl = @ImageUrl, ParentCategoryId = @ParentCategoryId WHERE Id = @Id",
                 new {
                     Id = category.Id.ToString(),
@@ -55,6 +62,13 @@ namespace LayeredArchitecture.Infrastructure
                     ImageUrl = category.ImageUrl?.UrlText,
                     ParentCategoryId = category.ParentCategoryId.ToString()
                 });
+
+            if (numberOfAffectedRows < 1)
+            {
+                throw new Exception(
+                    "Failed to update the category. " +
+                    $"Serialized category: {JsonConvert.SerializeObject(category)}.");
+            }
         }
     }
 }
