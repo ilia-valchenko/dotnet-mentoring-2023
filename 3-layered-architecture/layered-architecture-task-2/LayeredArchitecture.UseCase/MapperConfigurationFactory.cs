@@ -14,13 +14,13 @@ namespace LayeredArchitecture.UseCase
                     .ForMember(dest => dest.ImageUrlText, opt => opt.MapFrom(src => src.ImageUrl == null ? null : src.ImageUrl.UrlText));
 
                 cfg.CreateMap<Product, Domain.Entities.Product>()
-                    .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => new Url(src.ImageUrlText)));
+                    .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrlText == null ? null : new Url(src.ImageUrlText)));
 
                 cfg.CreateMap<Domain.Entities.Category, Category>()
                     .ForMember(dest => dest.ImageUrlText, opt => opt.MapFrom(src => src.ImageUrl == null ? null : src.ImageUrl.UrlText));
 
                 cfg.CreateMap<Category, Domain.Entities.Category>()
-                    .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => new Url(src.ImageUrlText)));
+                    .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrlText == null ? null : new Url(src.ImageUrlText)));
             });
         }
     }
