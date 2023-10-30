@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using RestfulWebApi.Infrastructure.Options;
 using RestfulWebApi.Infrastructure.Repositories;
 using RestfulWebApi.UseCase;
 using RestfulWebApi.UseCase.Services;
@@ -34,6 +35,8 @@ namespace RestfulWebApi.Api
             });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.Configure<DataAccess>(Configuration.GetSection("DataAccess"));
 
             services.AddScoped<IRepository<Domain.Entities.Category>, CategoryRepository>();
             services.AddScoped<IRepository<Domain.Entities.Product>, ProductRepository>();
