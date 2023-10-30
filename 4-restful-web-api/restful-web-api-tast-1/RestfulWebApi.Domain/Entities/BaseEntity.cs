@@ -7,21 +7,26 @@ namespace RestfulWebApi.Domain.Entities
 {
     public class BaseEntity
     {
-        private readonly Guid _id;
+        private Guid _id;
 
         private string _name = string.Empty;
 
-        public BaseEntity(Guid id)
+        public Guid Id
         {
-            if (id.Equals(Guid.Empty))
+            get
             {
-                throw new Exception("No empty GUIDs are allowed.");
+                return _id;
             }
+            set
+            {
+                if (value.Equals(Guid.Empty))
+                {
+                    throw new Exception("No empty GUIDs are allowed.");
+                }
 
-            _id = id;
+                _id = value;
+            }
         }
-
-        public Guid Id => _id;
 
         public string Name
         {

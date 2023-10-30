@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace RestfulWebApi.Domain.Entities
+﻿namespace RestfulWebApi.Infrastructure.Entities
 {
-    public class Product : BaseEntity
+    internal class Product : BaseEntity
     {
         public string Description { get; set; }
 
-        public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
 
         public decimal Price { get; set; }
 

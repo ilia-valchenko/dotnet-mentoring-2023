@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using RestfulWebApi.Domain.Entities;
 using RestfulWebApi.Infrastructure.Options;
-using RestfulWebApi.UseCase;
 
 namespace RestfulWebApi.Infrastructure.Repositories
 {
-    public class ProductRepository : BaseRepository<Product>
+    public class ProductRepository : BaseRepository<Domain.Entities.Product>
     {
-        public ProductRepository(IOptions<DataAccess> dataAccessOptions) : base(dataAccessOptions) { }
+        private readonly IMapper _mapper;
 
-        public override async Task<Product> CreateAsync(Product product, CancellationToken cancellationToken = default)
+        public ProductRepository(IMapper mapper, IOptions<DataAccess> dataAccessOptions) : base(dataAccessOptions)
+        {
+            _mapper = mapper;
+        }
+
+        public override async Task<Domain.Entities.Product> CreateAsync(Domain.Entities.Product product, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -53,21 +57,21 @@ namespace RestfulWebApi.Infrastructure.Repositories
             }
         }
 
-        public override async Task<Product> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public override async Task<Domain.Entities.Product> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var products = await connection.QueryAsync<Product>("SELECT * FROM Product WHERE Id = @Id;", new { Id = id.ToString() });
-            return products.SingleOrDefault();
+            var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product WHERE Id = @Id;", new { Id = id.ToString() });
+            return _mapper.Map<Domain.Entities.Product>(products.SingleOrDefault());
         }
 
-        public override async Task<IList<Product>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<IList<Domain.Entities.Product>> GetAsync(CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var products = await connection.QueryAsync<Product>("SELECT * FROM Product;");
-            return products.ToList();
+            var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product;");
+            return _mapper.Map<IList<Domain.Entities.Product>>(products);
         }
 
-        public override async Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
+        public override async Task UpdateAsync(Domain.Entities.Product product, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
 

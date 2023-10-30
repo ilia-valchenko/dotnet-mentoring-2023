@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using RestfulWebApi.Domain.Entities;
 using RestfulWebApi.Infrastructure.Options;
 
 namespace RestfulWebApi.Infrastructure.Repositories
 {
-    public class CategoryRepository : BaseRepository<Category>
+    public class CategoryRepository : BaseRepository<Domain.Entities.Category>
     {
-        public CategoryRepository(IOptions<DataAccess> dataAccessOptions) : base(dataAccessOptions) { }
+        private readonly IMapper _mapper;
 
-        public override async Task<Category> CreateAsync(Category category, CancellationToken cancellationToken = default)
+        public CategoryRepository(IMapper mapper, IOptions<DataAccess> dataAccessOptions) : base(dataAccessOptions)
+        {
+            _mapper = mapper;
+        }
+
+        public override async Task<Domain.Entities.Category> CreateAsync(Domain.Entities.Category category, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -29,7 +34,7 @@ namespace RestfulWebApi.Infrastructure.Repositories
                     "INSERT INTO Category (Id, Name, ImageUrl, ParentCategoryId) VALUES (@Id, @Name, @ImageUrl, @ParentCategoryId);",
                     new
                     {
-                        Id = category.Id.ToString(),
+                        Id = category.Id,
                         Name = category.Name,
                         ImageUrl = category.ImageUrl?.UrlText,
                         ParentCategoryId = category.ParentCategoryId?.ToString()
@@ -85,21 +90,21 @@ namespace RestfulWebApi.Infrastructure.Repositories
             }
         }
 
-        public override async Task<Category> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public override async Task<Domain.Entities.Category> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var categories = await connection.QueryAsync<Category>("SELECT * FROM Category WHERE Id = @Id;", new { Id = id.ToString() });
-            return categories.SingleOrDefault();
+            var categories = await connection.QueryAsync<Infrastructure.Entities.Category>("SELECT * FROM Category WHERE Id = @Id;", new { Id = id.ToString() });
+            return _mapper.Map<Domain.Entities.Category>(categories.SingleOrDefault());
         }
 
-        public override async Task<IList<Category>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<IList<Domain.Entities.Category>> GetAsync(CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var categories = await connection.QueryAsync<Category>("SELECT * FROM Category;");
-            return categories.ToList();
+            var categories = await connection.QueryAsync<Infrastructure.Entities.Category>("SELECT * FROM Category;");
+            return _mapper.Map<IList<Domain.Entities.Category>>(categories);
         }
 
-        public override async Task UpdateAsync(Category category, CancellationToken cancellationToken = default)
+        public override async Task UpdateAsync(Domain.Entities.Category category, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
 

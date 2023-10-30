@@ -7,7 +7,7 @@ namespace RestfulWebApi.Domain.Entities
     {
         private readonly IList<Product> _products;
 
-        public Category(Guid id) : base(id)
+        public Category()
         {
             _products = new List<Product>();
         }
