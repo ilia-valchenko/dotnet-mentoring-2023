@@ -16,7 +16,7 @@ namespace RestfulWebApi.Infrastructure.Repositories
     {
         public CategoryRepository(IOptions<DataAccess> dataAccessOptions) : base(dataAccessOptions) { }
 
-        public override async Task<Category> CreateAsync(Category category, CancellationToken cancellationToken)
+        public override async Task<Category> CreateAsync(Category category, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -85,21 +85,21 @@ namespace RestfulWebApi.Infrastructure.Repositories
             }
         }
 
-        public override async Task<Category> GetAsync(Guid id, CancellationToken cancellationToken)
+        public override async Task<Category> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             var categories = await connection.QueryAsync<Category>("SELECT * FROM Category WHERE Id = @Id;", new { Id = id.ToString() });
             return categories.SingleOrDefault();
         }
 
-        public override async Task<IList<Category>> GetAsync(CancellationToken cancellationToken)
+        public override async Task<IList<Category>> GetAsync(CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             var categories = await connection.QueryAsync<Category>("SELECT * FROM Category;");
             return categories.ToList();
         }
 
-        public override async Task UpdateAsync(Category category, CancellationToken cancellationToken)
+        public override async Task UpdateAsync(Category category, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
 

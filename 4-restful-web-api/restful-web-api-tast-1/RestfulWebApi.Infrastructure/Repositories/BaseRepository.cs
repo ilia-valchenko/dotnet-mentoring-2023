@@ -13,7 +13,7 @@ namespace RestfulWebApi.Infrastructure.Repositories
     {
         protected readonly string connectionString;
 
-        public BaseRepository(IOptions<DataAccess> dataAccessOptions)
+        protected BaseRepository(IOptions<DataAccess> dataAccessOptions)
         {
             if (string.IsNullOrWhiteSpace(dataAccessOptions?.Value?.ConnectionString))
             {
