@@ -2,10 +2,8 @@
 
 namespace RestfulWebApi.UseCase.DTOs
 {
-    public class Product : BaseDto
+    public class CreateProduct : BaseDto
     {
-        public Guid Id { get; set; }
-
         public string Description { get; set; }
 
         public Guid CategoryId { get; set; }

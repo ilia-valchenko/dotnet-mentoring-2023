@@ -6,5 +6,7 @@ namespace RestfulWebApi.Api.Controllers
     [ApiController]
     public abstract class BaseController : ControllerBase
     {
+        protected const int DefaultPageNumber = 1;
+        protected const int DefaultPageSize = 5;
     }
 }

@@ -58,24 +58,40 @@ namespace RestfulWebApi.Infrastructure.Repositories
             }
         }
 
-        public override async Task<Domain.Entities.Product> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public override async Task<Domain.Entities.Product> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product WHERE Id = @Id;", new { Id = id.ToString() });
             return _mapper.Map<Domain.Entities.Product>(products.SingleOrDefault());
         }
 
-        public override async Task<IList<Domain.Entities.Product>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<IList<Domain.Entities.Product>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product;");
+
+            var products = await connection.QueryAsync<Infrastructure.Entities.Product>(
+                "SELECT * FROM Product ORDER BY Id LIMIT @PageSize OFFSET (@PageNumber - 1) * @PageSize;",
+                new
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                });
+
             return _mapper.Map<IList<Domain.Entities.Product>>(products);
         }
 
-        public async Task<IList<Domain.Entities.Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+        public async Task<IList<Domain.Entities.Product>> GetByCategoryIdAsync(Guid categoryId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product WHERE CategoryId = @CategoryId;", new { CategoryId = categoryId.ToString() });
+
+            var products = await connection.QueryAsync<Infrastructure.Entities.Product>(
+                "SELECT * FROM Product WHERE CategoryId = @CategoryId ORDER BY Id LIMIT @PageSize OFFSET (@PageNumber - 1) * @PageSize;",
+                new {
+                    CategoryId = categoryId.ToString(),
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                });
+
             return _mapper.Map<IList<Domain.Entities.Product>>(products);
         }
 

@@ -24,9 +24,12 @@ namespace RestfulWebApi.Api.Controllers
 
         [HttpGet("categories")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UseCase.DTOs.Category>))]
-        public async Task<IActionResult> GetAllAsync(int pageNumber = 1, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetAllAsync(
+            int pageNumber = DefaultPageNumber,
+            int pageSize = DefaultPageSize,
+            CancellationToken cancellationToken = default)
         {
-            var categories = await _categoryService.GetAllAsync(cancellationToken);
+            var categories = await _categoryService.GetAllAsync(pageNumber, pageSize, cancellationToken);
             return Ok(categories);
         }
 
@@ -48,7 +51,7 @@ namespace RestfulWebApi.Api.Controllers
         [HttpPost("categories")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAsync(UseCase.DTOs.Category category, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(UseCase.DTOs.CreateCategory category, CancellationToken cancellationToken = default)
         {
             var createdCategory = await _categoryService.CreateAsync(category, cancellationToken);
             return CreatedAtAction(nameof(GetByIdAsync), new { id = createdCategory.Id }, createdCategory);

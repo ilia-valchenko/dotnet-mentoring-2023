@@ -23,7 +23,7 @@ namespace RestfulWebApi.UseCase.Services
             _mapper = mapper;
         }
 
-        public async Task<Category> CreateAsync(Category category, CancellationToken cancellationToken)
+        public async Task<Category> CreateAsync(Category category, CancellationToken cancellationToken = default)
         {
             var validationResult = _validator.Validate(category);
 
@@ -36,24 +36,24 @@ namespace RestfulWebApi.UseCase.Services
             return _mapper.Map<Category>(createdCategory);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             await _repository.DeleteAsync(id, cancellationToken);
         }
 
-        public async Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var entity = await _repository.GetAsync(id, cancellationToken);
+            var entity = await _repository.GetByIdAsync(id, cancellationToken);
             return _mapper.Map<Category>(entity);
         }
 
-        public async Task<IList<Category>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IList<Category>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            var entities = await _repository.GetAsync(cancellationToken);
+            var entities = await _repository.GetAllAsync(pageNumber, pageSize, cancellationToken);
             return _mapper.Map<IList<Category>>(entities);
         }
 
-        public async Task UpdateAsync(Category category, CancellationToken cancellationToken)
+        public async Task UpdateAsync(Category category, CancellationToken cancellationToken = default)
         {
             var validationResult = _validator.Validate(category);
 

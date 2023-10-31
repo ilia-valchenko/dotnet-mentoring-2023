@@ -27,9 +27,9 @@ namespace RestfulWebApi.Infrastructure.Repositories
 
         public abstract Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-        public abstract Task<T> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        public abstract Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        public abstract Task<IList<T>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract Task<IList<T>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
 
         public abstract Task UpdateAsync(T itemToUpdate, CancellationToken cancellationToken = default);
     }

@@ -11,6 +11,11 @@ namespace RestfulWebApi.Domain.Entities
 
         private string _name = string.Empty;
 
+        public BaseEntity()
+        {
+            Id = Guid.NewGuid();
+        }
+
         public Guid Id
         {
             get

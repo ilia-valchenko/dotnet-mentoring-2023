@@ -7,6 +7,6 @@ namespace RestfulWebApi.UseCase.Repositories
 {
     public interface IProductRepository : IRepository<Domain.Entities.Product>
     {
-        Task<IList<Domain.Entities.Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default);
+        Task<IList<Domain.Entities.Product>> GetByCategoryIdAsync(Guid categoryId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
     }
 }

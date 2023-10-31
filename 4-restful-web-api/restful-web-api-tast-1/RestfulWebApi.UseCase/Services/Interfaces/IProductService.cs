@@ -8,6 +8,6 @@ namespace RestfulWebApi.UseCase.Services.Interfaces
 {
     public interface IProductService : IService<Product>
     {
-        Task<IList<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default);
+        Task<IList<Product>> GetByCategoryIdAsync(Guid categoryId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
     }
 }

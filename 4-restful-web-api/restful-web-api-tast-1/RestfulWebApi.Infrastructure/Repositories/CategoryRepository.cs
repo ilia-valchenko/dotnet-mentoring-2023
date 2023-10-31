@@ -90,17 +90,24 @@ namespace RestfulWebApi.Infrastructure.Repositories
             }
         }
 
-        public override async Task<Domain.Entities.Category> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public override async Task<Domain.Entities.Category> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
             var categories = await connection.QueryAsync<Infrastructure.Entities.Category>("SELECT * FROM Category WHERE Id = @Id;", new { Id = id.ToString() });
             return _mapper.Map<Domain.Entities.Category>(categories.SingleOrDefault());
         }
 
-        public override async Task<IList<Domain.Entities.Category>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<IList<Domain.Entities.Category>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             using var connection = new SqliteConnection(connectionString);
-            var categories = await connection.QueryAsync<Infrastructure.Entities.Category>("SELECT * FROM Category;");
+
+            var categories = await connection.QueryAsync<Infrastructure.Entities.Category>(
+                "SELECT * FROM Category ORDER BY Id LIMIT @PageSize OFFSET (@PageNumber - 1) * @PageSize;",
+                new {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                });
+
             return _mapper.Map<IList<Domain.Entities.Category>>(categories);
         }
 

@@ -24,9 +24,12 @@ namespace RestfulWebApi.Api.Controllers
 
         [HttpGet("products")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UseCase.DTOs.Product>))]
-        public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetAllAsync(
+            int pageNumber = DefaultPageNumber,
+            int pageSize = DefaultPageSize,
+            CancellationToken cancellationToken = default)
         {
-            var products = await _productService.GetAllAsync(cancellationToken);
+            var products = await _productService.GetAllAsync(pageNumber, pageSize, cancellationToken);
             return Ok(products);
         }
 
@@ -40,16 +43,20 @@ namespace RestfulWebApi.Api.Controllers
 
         [HttpGet("categories/{categoryId:Guid}/products")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UseCase.DTOs.Product>))]
-        public async Task<IActionResult> GetBYCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetByCategoryIdAsync(
+            Guid categoryId,
+            int pageNumber = DefaultPageNumber,
+            int pageSize = DefaultPageSize,
+            CancellationToken cancellationToken = default)
         {
-            var products = await _productService.GetByCategoryIdAsync(categoryId, cancellationToken);
+            var products = await _productService.GetByCategoryIdAsync(categoryId, pageNumber, pageSize, cancellationToken);
             return Ok(products);
         }
 
         [HttpPost("categories/{categoryId:Guid}/products")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAsync(Guid categoryId, UseCase.DTOs.Product product, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(Guid categoryId, UseCase.DTOs.CreateProduct product, CancellationToken cancellationToken = default)
         {
             var createdProduct = await _productService.CreateAsync(product, cancellationToken);
             return CreatedAtAction(nameof(GetByIdAsync), new { id = createdProduct.Id }, createdProduct);

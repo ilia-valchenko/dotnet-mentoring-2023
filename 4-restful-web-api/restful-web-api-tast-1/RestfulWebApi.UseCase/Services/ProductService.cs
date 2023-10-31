@@ -42,19 +42,19 @@ namespace RestfulWebApi.UseCase.Services
 
         public async Task<DTOs.Product> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var product = await _repository.GetAsync(id, cancellationToken);
+            var product = await _repository.GetByIdAsync(id, cancellationToken);
             return _mapper.Map<DTOs.Product>(product);
         }
 
-        public async Task<IList<DTOs.Product>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IList<DTOs.Product>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            var products = await _repository.GetAsync(cancellationToken);
+            var products = await _repository.GetAllAsync(pageNumber, pageSize, cancellationToken);
             return _mapper.Map<IList<DTOs.Product>>(products);
         }
 
-        public async Task<IList<DTOs.Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+        public async Task<IList<DTOs.Product>> GetByCategoryIdAsync(Guid categoryId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            var products = await _repository.GetByCategoryIdAsync(categoryId, cancellationToken);
+            var products = await _repository.GetByCategoryIdAsync(categoryId, pageNumber, pageSize, cancellationToken);
             return _mapper.Map<IList<DTOs.Product>>(products);
         }
 

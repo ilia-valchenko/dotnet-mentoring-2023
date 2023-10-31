@@ -19,11 +19,6 @@ namespace RestfulWebApi.UseCase.Validators
 
             var validationResult = new ValidationResult();
 
-            if (item.Id.Equals(Guid.Empty))
-            {
-                validationResult.Exceptions.Add(new ArgumentException("No empty GUIDs are allowed."));
-            }
-
             if (string.IsNullOrWhiteSpace(item.Name))
             {
                 validationResult.Exceptions.Add(new InvalidNameException($"The length of the provided name is greater than {Limits.NameLengthLimit} characters."));
