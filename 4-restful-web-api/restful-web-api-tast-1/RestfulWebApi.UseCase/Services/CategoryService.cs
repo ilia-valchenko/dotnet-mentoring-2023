@@ -41,13 +41,13 @@ namespace RestfulWebApi.UseCase.Services
             await _repository.DeleteAsync(id, cancellationToken);
         }
 
-        public async Task<Category> GetAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetAsync(id, cancellationToken);
             return _mapper.Map<Category>(entity);
         }
 
-        public async Task<IList<Category>> GetAsync(CancellationToken cancellationToken)
+        public async Task<IList<Category>> GetAllAsync(CancellationToken cancellationToken)
         {
             var entities = await _repository.GetAsync(cancellationToken);
             return _mapper.Map<IList<Category>>(entities);
