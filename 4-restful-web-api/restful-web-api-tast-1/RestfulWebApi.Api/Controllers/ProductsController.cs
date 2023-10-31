@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestfulWebApi.Api.ViewModels;
+using RestfulWebApi.UseCase.Services;
 using RestfulWebApi.UseCase.Services.Interfaces;
 
 namespace RestfulWebApi.Api.Controllers
@@ -41,6 +42,26 @@ namespace RestfulWebApi.Api.Controllers
         {
             var products = await _productService.GetByCategoryIdAsync(id, cancellationToken);
             return Ok(_mapper.Map<IList<Product>>(products));
+        }
+
+        [HttpPost("products")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAsync(Product product, CancellationToken cancellationToken = default)
+        {
+            var productToCreate = _mapper.Map<UseCase.DTOs.Product>(product);
+            var createdProduct = await _productService.CreateAsync(productToCreate, cancellationToken);
+            return CreatedAtAction(nameof(GetAsync), new { id = createdProduct.Id }, _mapper.Map<Product>(createdProduct));
+        }
+
+        [HttpPost("categories/{id:Guid}/products")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAsync(Guid id, Product product, CancellationToken cancellationToken = default)
+        {
+            var productToCreate = _mapper.Map<UseCase.DTOs.Product>(product);
+            var createdProduct = await _productService.CreateAsync(productToCreate, cancellationToken);
+            return CreatedAtAction(nameof(GetAsync), new { id = createdProduct.Id }, _mapper.Map<Product>(createdProduct));
         }
     }
 }
