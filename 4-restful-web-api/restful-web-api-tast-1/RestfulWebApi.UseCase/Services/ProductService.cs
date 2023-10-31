@@ -2,42 +2,63 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using RestfulWebApi.UseCase.DTOs;
+using AutoMapper;
+using RestfulWebApi.UseCase.Repositories;
 using RestfulWebApi.UseCase.Services.Interfaces;
 using RestfulWebApi.UseCase.Validators.Interfaces;
 
 namespace RestfulWebApi.UseCase.Services
 {
-    public class ProductService : IService<Product>
+    public class ProductService : IProductService
     {
-        //public ProductService(IValidator<Product> validator, IRepository<Domain.Entities.Product> repository, IMapper mapper)
-        //{
-        //    _validator = validator;
-        //    _repository = repository;
-        //    _mapper = mapper;
-        //}
+        private readonly IValidator<DTOs.Product> _validator;
+        private readonly IProductRepository _repository;
+        private readonly IMapper _mapper;
 
-        public Task<Product> CreateAsync(Product product, CancellationToken cancellationToken = default)
+        public ProductService(IValidator<DTOs.Product> validator, IProductRepository repository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _validator = validator;
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<DTOs.Product> CreateAsync(DTOs.Product product, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var validationResult = _validator.Validate(product);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ArgumentException("Provided category is not valid.");
+            }
+
+            var createdProduct = await _repository.CreateAsync(_mapper.Map<Domain.Entities.Product>(product), cancellationToken);
+            return _mapper.Map<DTOs.Product>(createdProduct);
         }
 
-        public Task<Product> GetAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await _repository.DeleteAsync(id, cancellationToken);
         }
 
-        public Task<IList<Product>> GetAsync(CancellationToken cancellationToken = default)
+        public async Task<DTOs.Product> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var product = await _repository.GetAsync(id, cancellationToken);
+            return _mapper.Map<DTOs.Product>(product);
         }
 
-        public Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
+        public async Task<IList<DTOs.Product>> GetAsync(CancellationToken cancellationToken = default)
+        {
+            var products = await _repository.GetAsync(cancellationToken);
+            return _mapper.Map<IList<DTOs.Product>>(products);
+        }
+
+        public async Task<IList<DTOs.Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+        {
+            var products = await _repository.GetByCategoryIdAsync(categoryId, cancellationToken);
+            return _mapper.Map<IList<DTOs.Product>>(products);
+        }
+
+        public Task UpdateAsync(DTOs.Product product, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using RestfulWebApi.Domain.Entities;
 using RestfulWebApi.Infrastructure.Options;
-using RestfulWebApi.UseCase;
+using RestfulWebApi.UseCase.Repositories;
 
 namespace RestfulWebApi.Infrastructure.Repositories
 {

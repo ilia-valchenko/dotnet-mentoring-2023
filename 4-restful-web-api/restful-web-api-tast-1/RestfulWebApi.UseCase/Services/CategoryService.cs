@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using RestfulWebApi.UseCase.DTOs;
+using RestfulWebApi.UseCase.Repositories;
 using RestfulWebApi.UseCase.Services.Interfaces;
 using RestfulWebApi.UseCase.Validators.Interfaces;
 

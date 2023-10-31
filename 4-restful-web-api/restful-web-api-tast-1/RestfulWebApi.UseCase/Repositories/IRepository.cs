@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using RestfulWebApi.Domain.Entities;
 
-namespace RestfulWebApi.UseCase
+namespace RestfulWebApi.UseCase.Repositories
 {
     public interface IRepository<T> where T : BaseEntity
     {

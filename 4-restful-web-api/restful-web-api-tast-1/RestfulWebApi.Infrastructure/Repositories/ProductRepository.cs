@@ -9,10 +9,11 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestfulWebApi.Infrastructure.Options;
+using RestfulWebApi.UseCase.Repositories;
 
 namespace RestfulWebApi.Infrastructure.Repositories
 {
-    public class ProductRepository : BaseRepository<Domain.Entities.Product>
+    public class ProductRepository : BaseRepository<Domain.Entities.Product>, IProductRepository
     {
         private readonly IMapper _mapper;
 
@@ -68,6 +69,13 @@ namespace RestfulWebApi.Infrastructure.Repositories
         {
             using var connection = new SqliteConnection(connectionString);
             var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product;");
+            return _mapper.Map<IList<Domain.Entities.Product>>(products);
+        }
+
+        public async Task<IList<Domain.Entities.Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+        {
+            using var connection = new SqliteConnection(connectionString);
+            var products = await connection.QueryAsync<Infrastructure.Entities.Product>("SELECT * FROM Product WHERE CategoryId = @CategoryId;", new { CategoryId = categoryId.ToString() });
             return _mapper.Map<IList<Domain.Entities.Product>>(products);
         }
 
