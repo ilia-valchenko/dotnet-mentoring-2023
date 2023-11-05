@@ -56,10 +56,24 @@ namespace RestfulWebApi.Api.Controllers
         [HttpPost("categories/{categoryId:Guid}/products")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAsync(Guid categoryId, UseCase.DTOs.CreateProduct product, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(Guid categoryId, UseCase.DTOs.CreateProduct productToCreate, CancellationToken cancellationToken = default)
         {
-            var createdProduct = await _productService.CreateAsync(product, cancellationToken);
+            var createdProduct = await _productService.CreateAsync(productToCreate, cancellationToken);
             return CreatedAtAction(nameof(GetByIdAsync), new { id = createdProduct.Id }, createdProduct);
+        }
+
+        [HttpPatch("categories/{categoryId:Guid}/products/{productId:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UseCase.DTOs.Product))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateAsync(
+            Guid categoryId,
+            Guid productId,
+            UseCase.DTOs.UpdateProduct productToUpdate,
+            CancellationToken cancellationToken = default)
+        {
+            var updatedProduct = await _productService.UpdateAsync(productId, productToUpdate, cancellationToken);
+            return new OkObjectResult(updatedProduct);
         }
     }
 }

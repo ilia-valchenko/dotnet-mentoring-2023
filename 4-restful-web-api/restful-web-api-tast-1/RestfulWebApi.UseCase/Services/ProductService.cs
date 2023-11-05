@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using RestfulWebApi.UseCase.Exceptions;
 using RestfulWebApi.UseCase.Repositories;
 using RestfulWebApi.UseCase.Services.Interfaces;
 using RestfulWebApi.UseCase.Validators.Interfaces;
@@ -11,25 +12,28 @@ namespace RestfulWebApi.UseCase.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IValidator<DTOs.Product> _validator;
+        private readonly IValidator<DTOs.BaseDto> _validator;
         private readonly IProductRepository _repository;
         private readonly IMapper _mapper;
 
-        public ProductService(IValidator<DTOs.Product> validator, IProductRepository repository, IMapper mapper)
+        public ProductService(IValidator<DTOs.BaseDto> validator, IProductRepository repository, IMapper mapper)
         {
             _validator = validator;
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<DTOs.Product> CreateAsync(DTOs.Product product, CancellationToken cancellationToken = default)
+        public async Task<DTOs.Product> CreateAsync(DTOs.CreateProduct productToCreate, CancellationToken cancellationToken = default)
         {
-            var validationResult = _validator.Validate(product);
+            var validationResult = _validator.Validate(productToCreate);
 
             if (!validationResult.IsValid)
             {
-                throw new ArgumentException("Provided category is not valid.");
+                throw new ValidationException("Provided category is not valid.");
             }
+
+            var product = _mapper.Map<DTOs.Product>(productToCreate);
+            product.Id = Guid.NewGuid();
 
             var createdProduct = await _repository.CreateAsync(_mapper.Map<Domain.Entities.Product>(product), cancellationToken);
             return _mapper.Map<DTOs.Product>(createdProduct);
@@ -58,9 +62,29 @@ namespace RestfulWebApi.UseCase.Services
             return _mapper.Map<IList<DTOs.Product>>(products);
         }
 
-        public Task UpdateAsync(DTOs.Product product, CancellationToken cancellationToken = default)
+        public async Task<DTOs.Product> UpdateAsync(Guid id, DTOs.UpdateProduct productToUpdate, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var existingProduct = await GetByIdAsync(id, cancellationToken);
+
+            if (existingProduct == null)
+            {
+                throw new ResourceNotFoundException<Domain.Entities.Product>($"Can't find a product with id: '{id.ToString()}'.");
+            }
+
+            var validationResult = _validator.Validate(productToUpdate);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException("Provided product is not valid.");
+            }
+
+            existingProduct.Name = productToUpdate.Name;
+            existingProduct.ImageUrlText = productToUpdate.ImageUrlText;
+            existingProduct.Description = productToUpdate.Description;
+            existingProduct.Amount = productToUpdate.Amount;
+
+            var updatedProduct = _repository.UpdateAsync(_mapper.Map<Domain.Entities.Product>(existingProduct), cancellationToken);
+            return _mapper.Map<DTOs.Product>(updatedProduct);
         }
     }
 }

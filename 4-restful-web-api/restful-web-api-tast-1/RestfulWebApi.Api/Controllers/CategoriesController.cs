@@ -11,11 +11,11 @@ namespace RestfulWebApi.Api.Controllers
 {
     public class CategoriesController : BaseController
     {
-        private readonly IService<UseCase.DTOs.Category> _categoryService;
+        private readonly ICategoryService _categoryService;
         private readonly ILogger<CategoriesController> _logger;
 
         public CategoriesController(
-            IService<UseCase.DTOs.Category> categoryService,
+            ICategoryService categoryService,
             ILogger<CategoriesController> logger)
         {
             _categoryService = categoryService;
@@ -51,10 +51,20 @@ namespace RestfulWebApi.Api.Controllers
         [HttpPost("categories")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAsync(UseCase.DTOs.CreateCategory category, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(UseCase.DTOs.CreateCategory categoryToCreate, CancellationToken cancellationToken = default)
         {
-            var createdCategory = await _categoryService.CreateAsync(category, cancellationToken);
+            var createdCategory = await _categoryService.CreateAsync(categoryToCreate, cancellationToken);
             return CreatedAtAction(nameof(GetByIdAsync), new { id = createdCategory.Id }, createdCategory);
+        }
+
+        [HttpPatch("categories/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UseCase.DTOs.Category))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateAsync(Guid id, UseCase.DTOs.UpdateCategory categoryToUpdate, CancellationToken cancellationToken = default)
+        {
+            var updatedCategory = await _categoryService.UpdateAsync(id, categoryToUpdate, cancellationToken);
+            return new OkObjectResult(updatedCategory);
         }
     }
 }

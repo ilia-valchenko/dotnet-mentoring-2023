@@ -34,16 +34,17 @@ namespace RestfulWebApi.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestfulWebApi.Api", Version = "v1" });
             });
 
+            Microsoft.AspNetCore.Http.RequestDelegate rd = null;
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<DataAccess>(Configuration.GetSection("DataAccess"));
 
             services.AddScoped<IRepository<Domain.Entities.Category>, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IValidator<UseCase.DTOs.Category>, Validator<UseCase.DTOs.Category>>();
-            services.AddScoped<IValidator<UseCase.DTOs.Product>, Validator<UseCase.DTOs.Product>>();
-            services.AddScoped<IService<UseCase.DTOs.Category>, CategoryService>();
-            services.AddScoped<IService<UseCase.DTOs.Product>, ProductService>();
+            services.AddScoped<IValidator<UseCase.DTOs.BaseDto>, Validator<UseCase.DTOs.BaseDto>>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

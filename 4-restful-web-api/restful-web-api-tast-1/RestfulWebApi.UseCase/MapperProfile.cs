@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using RestfulWebApi.Domain.ValueObjects;
-using RestfulWebApi.UseCase.DTOs;
 
 namespace RestfulWebApi.UseCase
 {
@@ -8,17 +7,21 @@ namespace RestfulWebApi.UseCase
     {
         public MapperProfile()
         {
-            CreateMap<Domain.Entities.Product, Product>()
+            CreateMap<Domain.Entities.Product, UseCase.DTOs.Product>()
                 .ForMember(dest => dest.ImageUrlText, opt => opt.MapFrom(src => src.ImageUrl == null ? null : src.ImageUrl.UrlText));
 
-            CreateMap<Product, Domain.Entities.Product>()
+            CreateMap<UseCase.DTOs.Product, Domain.Entities.Product>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrlText == null ? null : new Url(src.ImageUrlText)));
 
-            CreateMap<Domain.Entities.Category, Category>()
+            CreateMap<UseCase.DTOs.CreateProduct, UseCase.DTOs.Product>();
+
+            CreateMap<Domain.Entities.Category, UseCase.DTOs.Category>()
                 .ForMember(dest => dest.ImageUrlText, opt => opt.MapFrom(src => src.ImageUrl == null ? null : src.ImageUrl.UrlText));
 
-            CreateMap<Category, Domain.Entities.Category>()
+            CreateMap<UseCase.DTOs.Category, Domain.Entities.Category>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrlText == null ? null : new Url(src.ImageUrlText)));
+
+            CreateMap<UseCase.DTOs.CreateCategory, UseCase.DTOs.Category>();
         }
     }
 }
