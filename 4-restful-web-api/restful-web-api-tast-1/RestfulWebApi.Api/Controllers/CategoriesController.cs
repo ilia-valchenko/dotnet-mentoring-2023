@@ -66,5 +66,14 @@ namespace RestfulWebApi.Api.Controllers
             var updatedCategory = await _categoryService.UpdateAsync(id, categoryToUpdate, cancellationToken);
             return new OkObjectResult(updatedCategory);
         }
+
+        [HttpDelete("categories/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            await _categoryService.DeleteAsync(id, cancellationToken);
+            return new OkResult();
+        }
     }
 }
