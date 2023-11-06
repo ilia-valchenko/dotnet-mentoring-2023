@@ -5,13 +5,13 @@ using RestfulWebApi.Domain.ValueObjects;
 
 namespace RestfulWebApi.Domain.Entities
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
         private Guid _id;
 
         private string _name = string.Empty;
 
-        public BaseEntity()
+        protected BaseEntity()
         {
             Id = Guid.NewGuid();
         }
