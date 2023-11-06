@@ -1,3 +1,4 @@
+using RestfulWebApi.Application;
 using RestfulWebApi.Application.Services;
 using RestfulWebApi.Application.Services.Interfaces;
 
@@ -10,8 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IRepository, TestInMemoryRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICartItemService, CartItemService>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

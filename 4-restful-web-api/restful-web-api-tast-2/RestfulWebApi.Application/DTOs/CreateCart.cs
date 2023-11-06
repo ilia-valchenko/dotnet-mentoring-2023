@@ -2,5 +2,5 @@
 
 public class CreateCart : BaseDto
 {
-    public IList<CreateCartItem>? Items { get; set; }
+    public IList<CreateCartItem> Items { get; set; } = new List<CreateCartItem>();
 }
