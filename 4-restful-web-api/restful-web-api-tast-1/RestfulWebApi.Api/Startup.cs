@@ -34,8 +34,6 @@ namespace RestfulWebApi.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestfulWebApi.Api", Version = "v1" });
             });
 
-            Microsoft.AspNetCore.Http.RequestDelegate rd = null;
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.Configure<DataAccess>(Configuration.GetSection("DataAccess"));
