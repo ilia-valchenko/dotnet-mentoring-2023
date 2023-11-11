@@ -2,30 +2,37 @@
 
 namespace Domain.Models;
 
-public class CartItem
+public class CartItem : BaseDomainModel
 {
-    private readonly Guid _id;
-    private readonly string _name;
+    private string _name = "Unknown";
 
-    public CartItem(Guid id, string name)
+    public CartItem() : base()
     {
-        if (id.Equals(Guid.Empty))
-        {
-            throw new ArgumentException("No empty GUIDs are allowed.");
-        }
-
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentException($"The '{nameof(name)}' can't be null or a white-space.");
-        }
-
-        _id = id;
-        _name = name;
     }
 
-    public Guid Id => _id;
-    public string Name => _name;
+    public CartItem(Guid id) : base(id)
+    {
+    }
+
+    public string Name {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException($"The '{nameof(Name)}' can't be null or a white-space.");
+            }
+
+            _name = value;
+        }
+    }
+
     public string? Description { get; set; }
-    public Image? Image { get; set; }
-    public decimal? Price { get; set; }
+
+    //public Image? Image { get; set; }
+
+    //public decimal? Price { get; set; }
 }

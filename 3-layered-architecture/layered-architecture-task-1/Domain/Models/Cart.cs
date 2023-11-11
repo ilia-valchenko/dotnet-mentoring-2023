@@ -1,22 +1,19 @@
 ﻿namespace Domain.Models;
 
-public class Cart
+public class Cart : BaseDomainModel
 {
-    private readonly Guid _id;
     private readonly IList<CartItem> _items;
 
-    public Cart(Guid id)
+    public Cart() : this(Guid.NewGuid())
     {
-        if (id.Equals(Guid.Empty))
-        {
-            throw new ArgumentException("No empty GUIDs are allowed.");
-        }
+    }
 
-        _id = id;
+    public Cart(Guid id) : base(id)
+    {
         _items = new List<CartItem>();
     }
 
-    public Guid Id => _id;
     public IList<CartItem> Items => _items;
-    public int Quantity => _items.Count;
+
+    public int Quantity { get; set; }
 }

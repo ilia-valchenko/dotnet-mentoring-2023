@@ -1,7 +1,10 @@
-﻿using Application.Common.Interfaces;
+﻿using Application;
 using Application.DTOs;
+using Dapper;
 using Domain.Models;
 using LiteDB;
+using Microsoft.Data.Sqlite;
+using Newtonsoft.Json;
 
 namespace Infrastructure;
 
@@ -16,14 +19,30 @@ public class CartRepository : ICartRepository
 
     public async Task CreateAsync(Cart cart, CancellationToken cancellationToken = default)
     {
-        await Task.Run(() =>
+        //await Task.Run(() =>
+        //{
+        //    using var db = new LiteDatabase(_connectionString);
+        //    // No async version.
+        //    var collection = db.GetCollection<Cart>("carts");
+        //    collection.Insert(cart);
+        //    db.Commit();
+        //});
+
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        int numberOfAffectedRows = await connection.ExecuteAsync(
+            "INSERT INTO Cart (Id, Quantity) VALUES (@Id, @Quantity);",
+            new
+            {
+                Id = cart.Id.ToString(),
+                Quantity = cart.Quantity
+            });
+
+        if (numberOfAffectedRows < 1)
         {
-            using var db = new LiteDatabase(_connectionString);
-            // No async version.
-            var collection = db.GetCollection<Cart>("carts");
-            collection.Insert(cart);
-            db.Commit();
-        });
+            throw new Exception("Failed to insert the new cart.");
+        }
     }
 
     public async Task<IList<Cart>> GetAsync(CancellationToken cancellationToken = default)
@@ -35,6 +54,46 @@ public class CartRepository : ICartRepository
             var collection = db.GetCollection<Cart>("carts");
             return collection.Query().ToList();
         });
+    }
+
+    public async Task<Cart> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await Task.Run(() =>
+        {
+            using var db = new LiteDatabase(_connectionString);
+            // No async version.
+            var collection = db.GetCollection<Cart>("carts");
+            return collection.FindOne(c => c.Id == id);
+        });
+    }
+
+    public async Task UpdateAsync(Cart cartToUpdate, CancellationToken cancellationToken = default)
+    {
+        //await Task.Run(() =>
+        //{
+        //    using var db = new LiteDatabase(_connectionString);
+        //    // No async version.
+        //    var collection = db.GetCollection<Cart>("carts");
+        //    collection.Update(cartToUpdate);
+        //    db.Commit();
+        //});
+
+        using var connection = new SqliteConnection(_connectionString);
+
+        var numberOfAffectedRows = await connection.ExecuteAsync(
+            "UPDATE Cart SET Quantity = @Quantity WHERE Id = @Id;",
+            new
+            {
+                Id = cartToUpdate.Id.ToString(),
+                Quantity = cartToUpdate.Quantity
+            });
+
+        if (numberOfAffectedRows < 1)
+        {
+            throw new Exception(
+                "Failed to update the cart. " +
+                $"Serialized category: {JsonConvert.SerializeObject(cartToUpdate)}.");
+        }
     }
 
     public async Task AddItemAsync(Guid cartId, CartItem itemToAdd, CancellationToken cancellationToken = default)

@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces;
-using Application.DTOs;
+﻿using Application.DTOs;
+using Application.Services.Interfaces;
 using AutoMapper;
 using Domain.Models;
 
@@ -28,32 +28,16 @@ public class CartService : ICartService
         return _mapper.Map<IList<CartDto>>(models);
     }
 
-    public async Task AddItemAsync(Guid cartId, CartItemDto itemToAdd, CancellationToken cancellationToken = default)
+    public async Task<CartDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        // TODO: We can do it in a different way.
-        // We can add Add(CartItem) method to the Cart domain model.
-        // In this case we will retrieve an instance of a cart model from the repository.
-        // Will call the new Add(CartItem) and will update the whole instance of the domain model.
-        // Example:
-        // var cartModel = await _cartRepository.GetAsync(id, cancellationToken);
-        // cartModel.Add(itemToAdd);
-        // await _cartRepository.UpdateAsync(cartModel, cancellationToken);
-
-        var cartItemModel = _mapper.Map<CartItem>(itemToAdd);
-        await _cartRepository.AddItemAsync(cartId, cartItemModel, cancellationToken);
+        var model = await _cartRepository.GetByIdAsync(id, cancellationToken);
+        return _mapper.Map<CartDto>(model);
     }
 
-    public async Task RemoveItemAsync(Guid cartId, Guid cartItemId, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Guid id, UpdateCartDto cartToUpdate, CancellationToken cancellationToken = default)
     {
-        // TODO: We can do it in a different way.
-        // We can add Remove(CartItem) method to the Cart domain model.
-        // In this case we will retrieve an instance of a cart model from the repository.
-        // Will call the new Remove(CartItem) and will update the whole instance of the domain model.
-        // Example:
-        // var cartModel = await _cartRepository.GetAsync(id, cancellationToken);
-        // cartModel.Remove(itemToRemove);
-        // await _cartRepository.UpdateAsync(cartModel, cancellationToken);
-
-        await _cartRepository.RemoveItemAsync(cartId, cartItemId, cancellationToken);
+        var cart = await _cartRepository.GetByIdAsync(id, cancellationToken);
+        cart.Quantity = cartToUpdate.Quantity;
+        await _cartRepository.UpdateAsync(cart, cancellationToken);
     }
 }
