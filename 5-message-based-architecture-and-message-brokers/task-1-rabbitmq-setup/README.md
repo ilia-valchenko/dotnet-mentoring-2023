@@ -11,3 +11,5 @@ Open http://localhost:8080/ locally in your browser. Default login is `guest` an
 I expect you to see the following picture.
 
 ![Screenshot 1](images/rabbitmq-overview.png "Title")
+
+![Screenshot 2](images/rabbitmq-screenshot-2.png "Title")
