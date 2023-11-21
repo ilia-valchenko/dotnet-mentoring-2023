@@ -13,3 +13,7 @@ I expect you to see the following picture.
 ![Screenshot 1](images/rabbitmq-overview.png "Title")
 
 ![Screenshot 2](images/rabbitmq-screenshot-2.png "Title")
+
+![Screenshot 2](images/rabbitmq-screenshot-3.png "Title")
+
+![Screenshot 2](images/rabbitmq-screenshot-4.png "Title")
