@@ -44,6 +44,6 @@ public class Service : IService
         {
             Id = item.Id,
             Price = item.Price
-        });
+        }, cancellationToken);
     }
 }

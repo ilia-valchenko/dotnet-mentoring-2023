@@ -1,12 +1,11 @@
-using System.Net.NetworkInformation;
-using System.Runtime;
+using MediatR;
 using MessageBasedArchitecture.Application;
+using MessageBasedArchitecture.Application.EventHandlers;
 using MessageBasedArchitecture.Application.Options;
 using MessageBasedArchitecture.Application.Services;
 using MessageBasedArchitecture.Application.Services.Interfaces;
 using MessageBasedArchitecture.Domain.Events;
 using MessageBasedArchitecture.Infrastructure;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +18,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IMessageBroker, MessageBroker>();
-builder.Services.AddScoped<IRepository, InMemoryRepository>();
+builder.Services.AddSingleton<IRepository, InMemoryRepository>();
 builder.Services.AddScoped<IService, Service>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(PriceChanged).Assembly));
+
+builder.Services.AddTransient<INotificationHandler<PriceChanged>, PriceChangedHandler>();
 
 builder.Services.Configure<MessageBrokerConfiguration>(builder.Configuration.GetSection("MessageBrokerConfiguration"));
 
