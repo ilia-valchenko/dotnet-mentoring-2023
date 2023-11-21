@@ -13,26 +13,10 @@ public class MessageBroker : IMessageBroker
         _messageBrokerConfiguration = MessageBrokerOptions.Value;
     }
 
-    public void PublishMessage(byte[] messageBody)
+    public T PullMessage<T>() where T : class
     {
-        if (messageBody == null)
-        {
-            throw new ArgumentNullException(nameof(messageBody));
-        }
-
-        if (messageBody.Length == 0)
-        {
-            throw new ArgumentException("The message body is empty.");
-        }
-
         using var connection = this.CreateConnection();
         using var channel = this.CreateChannel(connection);
-
-        channel.BasicPublish(
-            _messageBrokerConfiguration.ExchangeName,
-            _messageBrokerConfiguration.RoutingKey,
-            null,
-            messageBody);
 
         channel.Close();
         connection.Close();
@@ -59,6 +43,11 @@ public class MessageBroker : IMessageBroker
             _messageBrokerConfiguration.ExchangeName,
             _messageBrokerConfiguration.RoutingKey,
             null);
+
+        channel.BasicQos(
+            prefetchSize: 0, // We don't care about message size.
+            prefetchCount: 1, // The number of messages we want to pull at once.
+            global: false); // False means that we want to apply it to the current instance. Not to entire system.
 
         return channel;
     }
