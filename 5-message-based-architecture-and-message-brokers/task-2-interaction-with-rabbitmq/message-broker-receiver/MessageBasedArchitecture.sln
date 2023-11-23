@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBasedArchitecture.Worker", "MessageBasedArchitecture.Worker\MessageBasedArchitecture.Worker.csproj", "{DE16075F-F5A9-4470-B415-CCD61F3E68CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBasedArchitecture.Application", "MessageBasedArchitecture.Application\MessageBasedArchitecture.Application.csproj", "{6A60B7A6-0B0F-4709-9B97-DA019222612B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBasedArchitecture.Application", "MessageBasedArchitecture.Application\MessageBasedArchitecture.Application.csproj", "{6A60B7A6-0B0F-4709-9B97-DA019222612B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{9A558EA5-A319-4730-A6FA-4EDE84C379A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6A60B7A6-0B0F-4709-9B97-DA019222612B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A60B7A6-0B0F-4709-9B97-DA019222612B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A60B7A6-0B0F-4709-9B97-DA019222612B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A558EA5-A319-4730-A6FA-4EDE84C379A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A558EA5-A319-4730-A6FA-4EDE84C379A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A558EA5-A319-4730-A6FA-4EDE84C379A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A558EA5-A319-4730-A6FA-4EDE84C379A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

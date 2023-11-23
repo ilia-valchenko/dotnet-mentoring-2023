@@ -7,7 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.Configure<MessageBrokerConfiguration>(hostContext.Configuration.GetSection("MessageBrokerConfiguration"));
         services.AddHostedService<Worker>();
-        services.AddScoped<IMessageBroker, MessageBroker>();
+        services.AddSingleton<IMessageBroker, MessageBroker>();
     })
     .Build();
 

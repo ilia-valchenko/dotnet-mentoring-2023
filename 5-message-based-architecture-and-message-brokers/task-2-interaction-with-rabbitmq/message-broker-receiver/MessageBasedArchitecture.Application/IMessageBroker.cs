@@ -2,4 +2,5 @@
 
 public interface IMessageBroker
 {
+    T? PullMessage<T>() where T : class;
 }

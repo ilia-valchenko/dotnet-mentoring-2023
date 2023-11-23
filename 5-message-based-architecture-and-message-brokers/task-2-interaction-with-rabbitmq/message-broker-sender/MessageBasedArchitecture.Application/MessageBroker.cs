@@ -33,9 +33,6 @@ public class MessageBroker : IMessageBroker
             _messageBrokerConfiguration.RoutingKey,
             null,
             messageBody);
-
-        channel.Close();
-        connection.Close();
     }
 
     private IConnection CreateConnection()
@@ -49,7 +46,7 @@ public class MessageBroker : IMessageBroker
 
     private IModel CreateChannel(IConnection connection)
     {
-        using var channel = connection.CreateModel();
+        var channel = connection.CreateModel();
 
         channel.ExchangeDeclare(_messageBrokerConfiguration.ExchangeName, ExchangeType.Direct);
         channel.QueueDeclare(_messageBrokerConfiguration.QueueName, false, false, false, null);
