@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,7 @@ namespace RestfulWebApi.Api.Controllers
 
         [HttpGet("categories")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UseCase.DTOs.Category>))]
+        [Authorize]
         public async Task<IActionResult> GetAllAsync(
             int pageNumber = DefaultPageNumber,
             int pageSize = DefaultPageSize,
@@ -54,7 +56,8 @@ namespace RestfulWebApi.Api.Controllers
         public async Task<IActionResult> CreateAsync(UseCase.DTOs.CreateCategory categoryToCreate, CancellationToken cancellationToken = default)
         {
             var createdCategory = await _categoryService.CreateAsync(categoryToCreate, cancellationToken);
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = createdCategory.Id }, createdCategory);
+            return Ok();
+            //return CreatedAtAction(nameof(GetByIdAsync), new { id = createdCategory.Id }, createdCategory);
         }
 
         [HttpPatch("categories/{id:Guid}")]
