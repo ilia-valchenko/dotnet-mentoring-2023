@@ -12,4 +12,10 @@ This document contains metadata information such as the:
  - scopes it can authorize.
 
 ## IdentityServer Signing Credentials
-Signing credentials are private keys used to sign tokens. IdentityServer uses the **private key** to create signatures, while other applications use the corresponding **public key** to verify the signature. These public keys are accessible to client applications via the **jwks_uri in** the OpenID Connect discovery document.
+Signing credentials are private keys used to sign tokens. IdentityServer uses the **private key** to create signatures, while other applications use the corresponding **public key** to verify the signature. These public keys are accessible to client applications via the **jwks_uri in** the OpenID Connect discovery document. IdentityServer is only interested in the private key. 
+
+## Private and public keys
+We usually use RSA keys. We can use a tool such as OpenSSL.
+
+## Store of client applications
+We need to have a store of client applications that are allowed to use IdentityServer, as well as the protected resources that those clients can use, and the users that can authenticate in our system. In this application we use the in-memory stores.
