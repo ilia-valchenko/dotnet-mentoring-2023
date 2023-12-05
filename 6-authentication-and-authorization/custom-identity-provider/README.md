@@ -19,3 +19,6 @@ We usually use RSA keys. We can use a tool such as OpenSSL.
 
 ## Store of client applications
 We need to have a store of client applications that are allowed to use IdentityServer, as well as the protected resources that those clients can use, and the users that can authenticate in our system. In this application we use the in-memory stores.
+
+## IdentityServer clients
+IdentityServer needs to know what client applications are allowed to use it.
