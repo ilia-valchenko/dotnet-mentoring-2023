@@ -18,7 +18,7 @@ internal static class Clients
                 // TODO: Do not store credentials in a code. Put it in a config.
                 ClientSecrets = new List<Secret> {new Secret("TestSecretPassword".Sha256())},
                 // The AllowedScopes is a list of permissions that this client is allowed to request from IdentityServer.
-                AllowedScopes = new List<string> {"api1.read"}
+                AllowedScopes = new List<string> {"catalog-api.read"}
             }
         };
     }

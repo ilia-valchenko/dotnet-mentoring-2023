@@ -25,12 +25,17 @@ internal static class Resources
         {
             new ApiResource
             {
-                Name = "api1",
-                DisplayName = "API #1",
-                Description = "Allow the application to access API #1 on your behalf",
-                Scopes = new List<string> {"api1.read", "api1.write"},
+                Name = "catalog-api",
+                DisplayName = "Catalog API",
+                Description = "Allow the application to access Catalog API on your behalf",
                 ApiSecrets = new List<Secret> {new Secret("ScopeSecret".Sha256())},
-                UserClaims = new List<string> {"role"}
+                UserClaims = new List<string> {"role"},
+                Scopes = new List<string> {
+                    "catalog-api.read",
+                    "catalog-api.create",
+                    "catalog-api.update",
+                    "catalog-api.delete"
+                }
             }
         };
     }
@@ -39,8 +44,10 @@ internal static class Resources
     {
         return new[]
         {
-            new ApiScope("api1.read", "Read Access to API #1"),
-            new ApiScope("api1.write", "Write Access to API #1")
+            new ApiScope("catalog-api.read", "Read Access to Catalog API"),
+            new ApiScope("catalog-api.create", "Create Access to Catalog API"),
+            new ApiScope("catalog-api.update", "Update Access to Catalog API"),
+            new ApiScope("catalog-api.delete", "Delete Access to Catalog API")
         };
     }
 }

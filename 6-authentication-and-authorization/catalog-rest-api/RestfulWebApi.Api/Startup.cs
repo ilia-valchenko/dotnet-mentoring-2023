@@ -34,7 +34,7 @@ namespace RestfulWebApi.Api
                 .AddJwtBearer("Bearer", options =>
                 {
                     // The name of the API resource.
-                    options.Audience = "api1";
+                    options.Audience = "catalog-api";
                     // The URL of my IdentityServer.
                     options.Authority = "https://localhost:7193";
                 });

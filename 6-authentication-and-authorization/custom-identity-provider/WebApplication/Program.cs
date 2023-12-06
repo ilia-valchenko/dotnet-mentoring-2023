@@ -9,6 +9,7 @@ builder.Services.AddIdentityServer()
     .AddInMemoryIdentityResources(WebApplication.Resources.GetIdentityResources())
     .AddInMemoryApiResources(WebApplication.Resources.GetApiResources())
     .AddInMemoryApiScopes(WebApplication.Resources.GetApiScopes())
+    // AddTestUsers extension method adds support for the resource owner password grant.
     .AddTestUsers(WebApplication.Users.Get())
     .AddDeveloperSigningCredential();
 
