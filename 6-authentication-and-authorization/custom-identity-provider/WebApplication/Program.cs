@@ -11,6 +11,7 @@ builder.Services.AddIdentityServer()
     .AddInMemoryApiScopes(WebApplication.Resources.GetApiScopes())
     // AddTestUsers extension method adds support for the resource owner password grant.
     .AddTestUsers(WebApplication.Users.Get())
+    // It generate a certificate for signing tokens.
     .AddDeveloperSigningCredential();
 
 var app = builder.Build();

@@ -1,9 +1,11 @@
 using System;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RestfulWebApi.Infrastructure.Options;
 using RestfulWebApi.Infrastructure.Repositories;
@@ -31,12 +33,22 @@ namespace RestfulWebApi.Api
 
             // This authentication handler will automatically fetch the discovery document from IdentityServer on first use.
             services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+                .AddJwtBearer("Bearer", configureOptions =>
                 {
-                    // The name of the API resource.
-                    options.Audience = "catalog-api";
-                    // The URL of my IdentityServer.
-                    options.Authority = "https://localhost:7193";
+                    //// The name of the API resource.
+                    //options.Audience = "catalog-api";
+                    //// The URL of my IdentityServer.
+                    //options.Authority = "https://localhost:7193";
+
+                    var secretBytes = Encoding.UTF8.GetBytes(Constants.Constants.SecretKey);
+                    var key = new SymmetricSecurityKey(secretBytes);
+
+                    configureOptions.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Constants.Constants.Issuer,
+                        ValidAudience = Constants.Constants.Audience,
+                        IssuerSigningKey = key
+                    };
                 });
 
             //services.AddSwaggerGen(c =>

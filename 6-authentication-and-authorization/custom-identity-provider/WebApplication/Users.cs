@@ -6,6 +6,8 @@ namespace WebApplication;
 
 internal static class Users
 {
+    // RoleUser : IdentityUser
+    // Add some data to claim. See: IProfileService.
     public static List<TestUser> Get()
     {
         return new List<TestUser> {
