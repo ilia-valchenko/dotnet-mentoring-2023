@@ -1,14 +1,13 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace RestfulWebApi.Api.Controllers;
+namespace DummyIdentityServer.Web.Controllers;
 
-public class AuthorizeController : BaseController
+public class AuthorizeController : Controller
 {
     [HttpPost]
     [AllowAnonymous]

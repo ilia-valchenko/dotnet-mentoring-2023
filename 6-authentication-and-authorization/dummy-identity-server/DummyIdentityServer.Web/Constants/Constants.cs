@@ -1,4 +1,4 @@
-﻿namespace RestfulWebApi.Api.Constants;
+﻿namespace DummyIdentityServer.Web.Constants;
 
 public static class Constants
 {
