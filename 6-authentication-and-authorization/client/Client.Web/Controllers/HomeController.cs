@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Client.Web.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,13 @@ namespace Client.Web.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public HomeController(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
     public IActionResult Index()
     {
         return View();
@@ -28,7 +36,20 @@ public class HomeController : Controller
 
         // Now we can see our claims in the HomeController.User.Identity.Claims.
 
-        return View();
+        using var client = _httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+        var requestUri = "http://localhost:5000/api/v1/categories?pageNumber=1&pageSize=5";
+        var response = await client.GetAsync(requestUri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"Failed to get data from the protected API. URL: {requestUri}.");
+        }
+
+        var responseData = await response.Content.ReadAsStringAsync();
+        var deserializedData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(responseData);
+
+        return View(deserializedData);
     }
 
     //// *** ResponseJson value ***
