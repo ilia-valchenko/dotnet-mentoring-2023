@@ -1,5 +1,4 @@
 using System;
-using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RestfulWebApi.Api.AuthorizationRequirements;
-using RestfulWebApi.Api.AuthorizationRequirements.Extensions;
 using RestfulWebApi.Infrastructure.Options;
 using RestfulWebApi.Infrastructure.Repositories;
 using RestfulWebApi.UseCase.Repositories;
@@ -61,20 +59,14 @@ public class Startup
 
         services.AddAuthorization(config =>
         {
-            //// Here we override the default policy.
-            //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+            var defaultAuthBuilder = new AuthorizationPolicyBuilder();
 
             //var defaultAuthPolicy = defaultAuthBuilder
             //    .RequireAuthenticatedUser()
             //    .RequireClaim(ClaimTypes.DateOfBirth)
             //    .Build();
 
-            //config.DefaultPolicy = defaultAuthPolicy;
-
-            // ****************************************************************
-
-            var defaultAuthBuilder = new AuthorizationPolicyBuilder();
-
+            // Here we override the default policy.
             var defaultAuthPolicy = defaultAuthBuilder
                 // Here we usually specify requirements for which we are going
                 // to use handlers to validate.
@@ -88,10 +80,10 @@ public class Startup
 
             //config.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, "admin"));
 
-            config.AddPolicy("Claim.DoB", policyBuilder =>
-            {
-                policyBuilder.AddRequireCustomClaimRequirement(ClaimTypes.DateOfBirth);
-            });
+            //config.AddPolicy("Claim.DoB", policyBuilder =>
+            //{
+            //    policyBuilder.AddRequireCustomClaimRequirement(ClaimTypes.DateOfBirth);
+            //});
         });
 
         services.AddSwaggerGen(option =>
