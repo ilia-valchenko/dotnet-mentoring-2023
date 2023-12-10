@@ -22,11 +22,11 @@ public class OAuthController : Controller
                       // The client generate this state string. If the state changes once we go back to our
                       // client this is essentially going to error that basically we haven't requested this authorization.
     {
-        //?a=foo&b=bar
         var query = new QueryBuilder();
         query.Add("redirectUri", redirect_uri);
         query.Add("state", state);
 
+        // ?redirectUri=https%3A%2F%2Flocalhost%3A7079%2Foauth%2Fcallback&state=CfDJ8Gbrtnk6qZFAsrdxVOBx3dVvKl74txaqTeF2XgqhGRRXJcUkEXNxcKyxvs16N
         return View(model: query.ToString());
     }
 
@@ -44,6 +44,9 @@ public class OAuthController : Controller
         query.Add("code", code);
         query.Add("state", state);
 
+        // redirectUri="https://localhost:7079/oauth/callback"
+        // query="?code=BLXBKPOQTL&state=CfDJ8Gbrtnk6qZFAsrdxVOBx3dVvKl74txaqTeF2XgqhGRRXJcUkEXNxcKyxvs16N"
+        // https://localhost:7079/oauth/callback?code=BLXBKPOQTL&state=CfDJ8Gbrtnk6qZFAsrdxVOBx3dVvKl74txaqTeF2XgqhGRRXJcUkEXNxcKyxvs16N
         return Redirect($"{redirectUri}{query.ToString()}");
     }
 
@@ -88,6 +91,23 @@ public class OAuthController : Controller
         var responseBytes = Encoding.UTF8.GetBytes(responseJson);
         await Response.Body.WriteAsync(responseBytes, 0, responseBytes.Length);
 
+        //{
+        //    "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzb21lX2lkIiwibXlfY3VzdG9tX2NsYWltIjoiY3VzdG9tX2NsYWltX3ZhbHVlIiwibmJmIjoxNzAyMTk5MjUzLCJleHAiOjE3MDIyMDI4NTMsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzY3LyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC8ifQ.EZuSBfuKrpG6NKsHFcd6ZQzRlCyCrGhzHDlmKUu-D3U",
+        //    "token_type":"Bearer",
+        //    "raw_claim":"oauthTutorial"
+        //}
+
+        //// Decoded access_token
+        //{
+        //    "sub": "some_id",
+        //    "my_custom_claim": "custom_claim_value",
+        //    "nbf": 1702199253,
+        //    "exp": 1702202853,
+        //    "iss": "https://localhost:44367/",
+        //    "aud": "http://localhost:5000/"
+        //}
+
+        // redirect_uri="https://localhost:7079/oauth/callback"
         return Redirect(redirect_uri);
     }
 
