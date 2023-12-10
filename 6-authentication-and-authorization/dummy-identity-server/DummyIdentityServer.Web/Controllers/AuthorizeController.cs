@@ -15,8 +15,8 @@ public class AuthorizeController : Controller
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, "some_id"),
-            new Claim("my_custom_claim", "custom_claim_value")
+            new Claim(JwtRegisteredClaimNames.Sub, "testid"),
+            new Claim("mycustomclaim", "customclaimvalue")
         };
 
         var secretBytes = Encoding.UTF8.GetBytes(Constants.Constants.SecretKey);

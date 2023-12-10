@@ -18,6 +18,14 @@ public class HomeController : Controller
         // BTW We will see nothing until we set config.SaveTokens = true in Startup.
         var accessToken = await HttpContext.GetTokenAsync("access_token");
 
+        // Now we have an access token. It means that we can use it for calling multiple APIs that can be protected.
+        // Primarilly the idea for using this access token is essentially including the request
+        // to an API the same way what we did with Postman (via Header or URL).
+        // We will send these requests to the protected APIs and then
+        // these APIs are gonna go to the IdentityServer and make sure
+        // that the tokens are valid.
+        // It's like a triangle communication.
+
         return View();
     }
 

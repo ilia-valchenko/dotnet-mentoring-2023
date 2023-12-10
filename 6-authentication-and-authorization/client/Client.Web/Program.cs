@@ -1,8 +1,18 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(config =>
 {
+    // We will see a new cookie in our browser.
+    // Cookie name: .AspNetCore.ClientCookie
+
     // We check the cookie to confirm that we are authenticated.
+    // This is how we are authenticated. How will we use an access token
+    // after authentication is up to us.
     config.DefaultAuthenticateScheme = "ClientCookie";
     // When we sign in we will deal out a cookie.
     config.DefaultSignInScheme = "ClientCookie";
@@ -19,6 +29,32 @@ builder.Services.AddAuthentication(config =>
     config.AuthorizationEndpoint = "https://localhost:44367/oauth/authorize";
     config.TokenEndpoint = "https://localhost:44367/oauth/token"; // We will need to send 'grant_type and=authorization_code' and 'code' and 'redirect_uri' and 'client_id'.
     config.SaveTokens = true; // Defines whether access and refresh tokens should be stored in the Microsoft.AspNetCore.Authentication.AuthenticationProperties after a successful authorization.
+    config.Events = new OAuthEvents
+    {
+        // This is a function which is going to return a Task.
+        OnCreatingTicket = context =>
+        {
+            var accessToken = context.AccessToken;
+            var base64Payload = accessToken.Split('.')[1];
+            var jsonPayload = Base64UrlEncoder.Decode(base64Payload);
+            var claims = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPayload);
+
+            // *** Example ***
+            // "sub": "testid",
+            // "mycustomclaim": "customclaimvalue",
+            // "nbf": 1702208978,
+            // "exp": 1702212578,
+            // "iss": "https://localhost:44367/",
+            // "aud": "https://localhost:5000/"
+
+            foreach (var claim in claims)
+            {
+                context.Identity.AddClaim(new Claim(claim.Key, claim.Value));
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 //// *** AuthorizationEndpoint ***

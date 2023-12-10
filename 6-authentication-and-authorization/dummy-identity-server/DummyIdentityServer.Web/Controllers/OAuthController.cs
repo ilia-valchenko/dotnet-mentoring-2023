@@ -62,8 +62,8 @@ public class OAuthController : Controller
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, "some_id"),
-            new Claim("my_custom_claim", "custom_claim_value")
+            new Claim(JwtRegisteredClaimNames.Sub, "testid"),
+            new Claim("mycustomclaim", "customclaimvalue")
         };
 
         var secretBytes = Encoding.UTF8.GetBytes(Constants.Constants.SecretKey);
@@ -100,8 +100,8 @@ public class OAuthController : Controller
 
         //// *** Decoded access_token ***
         //{
-        //    "sub": "some_id",
-        //    "my_custom_claim": "custom_claim_value",
+        //    "sub": "testid",
+        //    "mycustomclaim": "customclaimvalue",
         //    "nbf": 1702199253,
         //    "exp": 1702202853,
         //    "iss": "https://localhost:44367/",
