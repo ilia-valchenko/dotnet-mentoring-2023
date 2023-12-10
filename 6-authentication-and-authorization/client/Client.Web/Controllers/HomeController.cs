@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Web.Controllers;
@@ -11,8 +12,29 @@ public class HomeController : Controller
     }
 
     [Authorize]
-    public IActionResult Secret()
+    public async Task<IActionResult> Secret()
     {
+        // Authenticates the request using the default authentication scheme and returns the value for the token.
+        // BTW We will see nothing until we set config.SaveTokens = true in Startup.
+        var accessToken = await HttpContext.GetTokenAsync("access_token");
+
         return View();
     }
+
+    //// *** ResponseJson value ***
+    //{
+    //    "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzb21lX2lkIiwibXlfY3VzdG9tX2NsYWltIjoiY3VzdG9tX2NsYWltX3ZhbHVlIiwibmJmIjoxNzAyMTk5MjUzLCJleHAiOjE3MDIyMDI4NTMsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzY3LyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC8ifQ.EZuSBfuKrpG6NKsHFcd6ZQzRlCyCrGhzHDlmKUu-D3U",
+    //    "token_type":"Bearer",
+    //    "raw_claim":"oauthTutorial"
+    //}
+
+    //// *** Decoded access_token ***
+    //{
+    //    "sub": "some_id",
+    //    "my_custom_claim": "custom_claim_value",
+    //    "nbf": 1702199253,
+    //    "exp": 1702202853,
+    //    "iss": "https://localhost:44367/",
+    //    "aud": "http://localhost:5000/"
+    //}
 }

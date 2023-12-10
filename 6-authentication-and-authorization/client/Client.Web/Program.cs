@@ -18,6 +18,7 @@ builder.Services.AddAuthentication(config =>
     config.CallbackPath = "/oauth/callback";
     config.AuthorizationEndpoint = "https://localhost:44367/oauth/authorize";
     config.TokenEndpoint = "https://localhost:44367/oauth/token"; // We will need to send 'grant_type and=authorization_code' and 'code' and 'redirect_uri' and 'client_id'.
+    config.SaveTokens = true; // Defines whether access and refresh tokens should be stored in the Microsoft.AspNetCore.Authentication.AuthenticationProperties after a successful authorization.
 });
 
 //// *** AuthorizationEndpoint ***
@@ -30,6 +31,15 @@ builder.Services.AddAuthentication(config =>
 //// *** AuthorizationEndpoint (redirect response) ***
 //https://localhost:7079/oauth/callbackcode=JQBRMYOYVB
 //&state=CfDJ8Gbrtnk6qZFAsrdxVOBx3dUOUzGV1i5u59wvu_h1aEe4oFJ7nxKCRJcdpHIH_4G5oGQyvg_87fKHKRJHRe4zEP8uE553QBprntaGpwc5
+
+//// *** TokenEndpoint (incoming parameters) ***
+//grant_type = "authorization_code"
+//code = "RKWFYAZZLE"
+//redirectUri = "https://localhost:7079/oauth/callback"
+//client_id = "my_client_id"
+
+// After that we will see a new cookie in our browser.
+// Cookie name: .AspNetCore.ClientCookie
 
 builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();

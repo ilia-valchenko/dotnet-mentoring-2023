@@ -91,13 +91,14 @@ public class OAuthController : Controller
         var responseBytes = Encoding.UTF8.GetBytes(responseJson);
         await Response.Body.WriteAsync(responseBytes, 0, responseBytes.Length);
 
+        //// *** ResponseJson value ***
         //{
         //    "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzb21lX2lkIiwibXlfY3VzdG9tX2NsYWltIjoiY3VzdG9tX2NsYWltX3ZhbHVlIiwibmJmIjoxNzAyMTk5MjUzLCJleHAiOjE3MDIyMDI4NTMsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzY3LyIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC8ifQ.EZuSBfuKrpG6NKsHFcd6ZQzRlCyCrGhzHDlmKUu-D3U",
         //    "token_type":"Bearer",
         //    "raw_claim":"oauthTutorial"
         //}
 
-        //// Decoded access_token
+        //// *** Decoded access_token ***
         //{
         //    "sub": "some_id",
         //    "my_custom_claim": "custom_claim_value",
@@ -106,6 +107,9 @@ public class OAuthController : Controller
         //    "iss": "https://localhost:44367/",
         //    "aud": "http://localhost:5000/"
         //}
+
+        // After that we will see a new cookie in our browser.
+        // Cookie name: .AspNetCore.ClientCookie
 
         // redirect_uri="https://localhost:7079/oauth/callback"
         return Redirect(redirect_uri);
