@@ -25,7 +25,7 @@ namespace RestfulWebApi.Api.Controllers
 
         [HttpGet("categories")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UseCase.DTOs.Category>))]
-        [Authorize]
+        [Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
         //[Authorize("readPolicy")]
         public async Task<IActionResult> GetAllAsync(
             int pageNumber = DefaultPageNumber,

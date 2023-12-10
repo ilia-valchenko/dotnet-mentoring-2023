@@ -2,9 +2,9 @@
 
 namespace RestfulWebApi.Api.AuthorizationRequirements;
 
-public class CustomRequireClaim : IAuthorizationRequirement
+public class CustomRequireClaimRequirement : IAuthorizationRequirement
 {
-    public CustomRequireClaim(string claimType)
+    public CustomRequireClaimRequirement(string claimType)
     {
         ClaimType = claimType;
     }

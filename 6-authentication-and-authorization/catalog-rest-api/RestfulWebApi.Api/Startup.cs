@@ -1,5 +1,7 @@
 using System;
+using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RestfulWebApi.Api.AuthorizationRequirements;
+using RestfulWebApi.Api.AuthorizationRequirements.Extensions;
 using RestfulWebApi.Infrastructure.Options;
 using RestfulWebApi.Infrastructure.Repositories;
 using RestfulWebApi.UseCase.Repositories;
@@ -55,6 +59,41 @@ public class Startup
                 };
             });
 
+        services.AddAuthorization(config =>
+        {
+            //// Here we override the default policy.
+            //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+
+            //var defaultAuthPolicy = defaultAuthBuilder
+            //    .RequireAuthenticatedUser()
+            //    .RequireClaim(ClaimTypes.DateOfBirth)
+            //    .Build();
+
+            //config.DefaultPolicy = defaultAuthPolicy;
+
+            // ****************************************************************
+
+            var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+
+            var defaultAuthPolicy = defaultAuthBuilder
+                // Here we usually specify requirements for which we are going
+                // to use handlers to validate.
+                .AddRequirements(new JwtRequirement())
+                // For default authorization we're gonna redirect it to the server.
+                .Build();
+
+            config.DefaultPolicy = defaultAuthPolicy;
+
+            // ****************************************************************
+
+            //config.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, "admin"));
+
+            config.AddPolicy("Claim.DoB", policyBuilder =>
+            {
+                policyBuilder.AddRequireCustomClaimRequirement(ClaimTypes.DateOfBirth);
+            });
+        });
+
         services.AddSwaggerGen(option =>
         {
             option.SwaggerDoc("v1", new OpenApiInfo { Title = "RestfulWebApi.Api", Version = "v1" });
@@ -88,6 +127,11 @@ public class Startup
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.Configure<DataAccess>(Configuration.GetSection("DataAccess"));
+
+        services.AddHttpClient()
+            .AddHttpContextAccessor(); // It will allow us to get an access to the HttpContext.
+
+        services.AddScoped<IAuthorizationHandler, JwtRequirementHandler>();
 
         services.AddScoped<IRepository<Domain.Entities.Category>, CategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();

@@ -19,7 +19,8 @@ public class HomeController : Controller
         return View();
     }
 
-    [Authorize("Admin")]
+    //[Authorize("Admin")]
+    [Authorize]
     public async Task<IActionResult> Secret()
     {
         // Authenticates the request using the default authentication scheme and returns the value for the token.

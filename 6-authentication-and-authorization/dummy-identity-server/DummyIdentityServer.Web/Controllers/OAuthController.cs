@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -114,6 +115,17 @@ public class OAuthController : Controller
 
         // redirect_uri="https://localhost:7079/oauth/callback"
         return Redirect(redirect_uri);
+    }
+
+    //[Authorize]
+    public IActionResult ValidateToken()
+    {
+        if (HttpContext.Request.Query.TryGetValue("access_token", out var accessToken))
+        {
+            return Ok();
+        }
+
+        return BadRequest();
     }
 
     // An example of successful response:

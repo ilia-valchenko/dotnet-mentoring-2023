@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RestfulWebApi.Api.AuthorizationRequirements;
 
-public class CustomRequireClaimHandler : AuthorizationHandler<CustomRequireClaim>
+public class CustomRequireClaimRequirementHandler : AuthorizationHandler<CustomRequireClaimRequirement>
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
-        CustomRequireClaim requirement)
+        CustomRequireClaimRequirement requirement)
     {
         var hasClaim = context.User.Claims.Any(x => x.Type == requirement.ClaimType);
 

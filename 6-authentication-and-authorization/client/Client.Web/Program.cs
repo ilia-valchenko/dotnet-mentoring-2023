@@ -1,6 +1,9 @@
 using System.Security.Claims;
+using Client.Web.AuthorizationRequirements;
 using Client.Web.AuthorizationRequirements.Extensions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -97,6 +100,12 @@ builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
 
 builder.Services.AddHttpClient();
+
+//builder.Services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();
+//builder.Services.AddScoped<IAuthorizationHandler, SecurityLevelHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
+//builder.Services.AddScoped<IAuthorizationHandler, CookieJarAuthorizationHandler>();
+//builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformation>();
 
 var app = builder.Build();
 
