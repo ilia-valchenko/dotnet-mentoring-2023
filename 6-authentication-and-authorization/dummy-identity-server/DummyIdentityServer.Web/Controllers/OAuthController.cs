@@ -63,7 +63,8 @@ public class OAuthController : Controller
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, "testid"),
-            new Claim("mycustomclaim", "customclaimvalue")
+            new Claim("mycustomclaim", "customclaimvalue"),
+            new Claim(ClaimTypes.Role, "admin")
         };
 
         var secretBytes = Encoding.UTF8.GetBytes(Constants.Constants.SecretKey);
