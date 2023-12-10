@@ -26,6 +26,8 @@ public class HomeController : Controller
         // that the tokens are valid.
         // It's like a triangle communication.
 
+        // Now we can see our claims in the HomeController.User.Identity.Claims.
+
         return View();
     }
 

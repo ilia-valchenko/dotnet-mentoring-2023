@@ -1,9 +1,14 @@
 using System.Security.Claims;
+using Client.Web.AuthorizationRequirements.Extensions;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//
+// ********* Here we use OAuth Authorization Code Flow *********
+//
 
 builder.Services.AddAuthentication(config =>
 {
@@ -32,6 +37,7 @@ builder.Services.AddAuthentication(config =>
     config.Events = new OAuthEvents
     {
         // This is a function which is going to return a Task.
+        // This event happens after we receive an access token.
         OnCreatingTicket = context =>
         {
             var accessToken = context.AccessToken;
@@ -55,6 +61,16 @@ builder.Services.AddAuthentication(config =>
             return Task.CompletedTask;
         }
     };
+});
+
+builder.Services.AddAuthorization(config =>
+{
+    config.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, "admin"));
+
+    config.AddPolicy("Claim.DoB", policyBuilder =>
+    {
+        policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
+    });
 });
 
 //// *** AuthorizationEndpoint ***
