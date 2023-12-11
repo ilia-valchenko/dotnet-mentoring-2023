@@ -21,7 +21,7 @@ public class HomeController : Controller
 
     //[Authorize("Admin")]
     [Authorize]
-    public async Task<IActionResult> Secret()
+    public async Task<IActionResult> Secret(CancellationToken cancellationToken = default)
     {
         // Authenticates the request using the default authentication scheme and returns the value for the token.
         // BTW We will see nothing until we set config.SaveTokens = true in Startup.
@@ -40,14 +40,14 @@ public class HomeController : Controller
         using var client = _httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
         var requestUri = "http://localhost:5000/api/v1/categories?pageNumber=1&pageSize=5";
-        var response = await client.GetAsync(requestUri);
+        var response = await client.GetAsync(requestUri, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception($"Failed to get data from the protected API. URL: {requestUri}.");
         }
 
-        var responseData = await response.Content.ReadAsStringAsync();
+        var responseData = await response.Content.ReadAsStringAsync(cancellationToken);
         var deserializedData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(responseData);
 
         return View(deserializedData);
