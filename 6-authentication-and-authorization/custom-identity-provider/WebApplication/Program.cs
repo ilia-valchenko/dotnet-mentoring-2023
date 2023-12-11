@@ -16,6 +16,7 @@ builder.Services
     // AddTestUsers extension method adds support for the resource owner password grant.
     .AddTestUsers(IdentityServer.Users.GetUsers())
     // It generate a certificate for signing tokens.
+    // It will create tempkey.jwk file in the solution.
     .AddDeveloperSigningCredential();
 
 var app = builder.Build();

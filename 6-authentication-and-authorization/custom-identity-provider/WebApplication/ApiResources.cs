@@ -26,7 +26,7 @@ internal static class ApiResources
 
         return new[]
         {
-            new ApiResource("ApiOne")
+            new ApiResource("catalog-api")
         };
     }
 }
