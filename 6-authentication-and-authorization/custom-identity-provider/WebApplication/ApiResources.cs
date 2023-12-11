@@ -24,12 +24,18 @@ internal static class ApiResources
         //    }
         //};
 
+        // Here we register our APIs.
         return new[]
         {
             new ApiResource
             {
                 Name = "catalog-api",
                 Scopes = { "catalog-api" }
+            },
+            new ApiResource
+            {
+                Name = "client-api",
+                Scopes = { "client-api" }
             }
         };
     }

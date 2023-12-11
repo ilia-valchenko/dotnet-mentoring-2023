@@ -17,7 +17,8 @@ internal static class ApiScopes
 
         return new[]
         {
-            new ApiScope("catalog-api", "Full access to Catalog API")
+            new ApiScope("catalog-api", "Full access to Catalog API"),
+            new ApiScope("client-api")
         };
     }
 }

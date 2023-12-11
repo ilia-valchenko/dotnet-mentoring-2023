@@ -24,12 +24,22 @@ internal static class Clients
 
         return new List<Client>
         {
+            // FYI: When we use client credentials flow we usually do not want
+            // to allow our client to be public accessible.
             new Client
             {
                 ClientId = "my_client_id",
                 ClientSecrets = new List<Secret> {new Secret("TestClientSecretValue".Sha256())},
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 AllowedScopes = { "catalog-api" }
+            },
+            new Client
+            {
+                ClientId = "my_client_id_mvc",
+                ClientSecrets = new List<Secret> {new Secret("TestClientMvcSecretValue".Sha256())},
+                // 'Code' stands for Authorization Code Flow.
+                AllowedGrantTypes = GrantTypes.Code,
+                AllowedScopes = { "catalog-api", "client-api" }
             }
         };
     }
