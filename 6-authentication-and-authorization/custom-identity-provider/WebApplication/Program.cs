@@ -3,10 +3,15 @@ using IdentityServer4.Test;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
-builder.Services.AddIdentityServer() // AddIdentityServer() adds Authentication and Authorization.
-    .AddInMemoryClients(IdentityServer.Clients.GetClients()) // Before our clients start to be exist our IdentityServer needs to be aware of them.
+builder.Services
+    // AddIdentityServer() adds Authentication and Authorization.
+    .AddIdentityServer()
+    // Before our clients start to be exist our IdentityServer needs to be aware of them.
+    // They are clients which consume protected APIs.
+    .AddInMemoryClients(IdentityServer.Clients.GetClients())
     .AddInMemoryIdentityResources(IdentityServer.IdentityResources.GetIdentityResources())
-    .AddInMemoryApiResources(IdentityServer.ApiResources.GetApiResources()) // It's our APIs. They are our APIs we are securing.
+    // It's our APIs. They are our APIs we are securing. It is used for identifies our APIs.
+    .AddInMemoryApiResources(IdentityServer.ApiResources.GetApiResources())
     .AddInMemoryApiScopes(IdentityServer.ApiScopes.GetApiScopes())
     // AddTestUsers extension method adds support for the resource owner password grant.
     .AddTestUsers(IdentityServer.Users.GetUsers())
