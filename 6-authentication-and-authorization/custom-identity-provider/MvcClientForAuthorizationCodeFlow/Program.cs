@@ -1,13 +1,15 @@
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Now we are using OpenID Connect flow.
 // We will have to add OpenID Connect extension.
 builder.Services.AddAuthentication(config =>
 {
-    config.DefaultScheme = "CustomCookieAuthenticationSchema";
+    config.DefaultScheme = "Cookie"; // "CustomCookieAuthenticationSchema"
     config.DefaultChallengeScheme = "CustomOidcScheme";
 })
-.AddCookie("CustomCookieAuthenticationSchema")
+.AddCookie("Cookie" /*"CustomCookieAuthenticationSchema"*/)
 // Instead of having an access token only we will also have an id token.
 // BTW. This is OIDC. This middleware knows how to retrieve the discovery document.
 .AddOpenIdConnect("CustomOidcScheme", config =>
@@ -33,7 +35,8 @@ builder.Services.AddAuthentication(config =>
 
     config.ResponseType = "code";
 
-    // FYI: OpenID automatically populates `scope` with `openid` scope value.
+    // FYI: OpenID automatically populates `scope`
+    // with `openid` and 'profile' scope values.
 });
 
 builder.Services.AddControllersWithViews();
