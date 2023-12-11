@@ -15,6 +15,7 @@ internal static class ApiScopes
         //    new ApiScope("catalog-api", "Full access to Catalog API")
         //};
 
+        // If I'm asking for an email, telephone number or a picture URL that is also a scope.
         return new[]
         {
             new ApiScope("catalog-api", "Full access to Catalog API"),

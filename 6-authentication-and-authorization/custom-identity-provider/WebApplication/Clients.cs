@@ -39,7 +39,14 @@ internal static class Clients
                 ClientSecrets = new List<Secret> {new Secret("TestClientMvcSecretValue".Sha256())},
                 // 'Code' stands for Authorization Code Flow.
                 AllowedGrantTypes = GrantTypes.Code,
-                AllowedScopes = { "catalog-api", "client-api" }
+                RedirectUris = { "https://localhost:7240/signin-oidc" },
+                AllowedScopes =
+                {
+                    "catalog-api",
+                    "client-api",
+                    IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile
+                }
             }
         };
     }

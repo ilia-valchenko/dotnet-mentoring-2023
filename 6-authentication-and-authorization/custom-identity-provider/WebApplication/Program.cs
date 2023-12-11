@@ -11,7 +11,7 @@ builder.Services
     // Before our clients start to be exist our IdentityServer needs to be aware of them.
     // They are clients which consume protected APIs.
     .AddInMemoryClients(IdentityServer.Clients.GetClients())
-    //.AddInMemoryIdentityResources(IdentityServer.IdentityResources.GetIdentityResources())
+    .AddInMemoryIdentityResources(IdentityServer.IdentityResources.GetIdentityResources())
     // It's our APIs. They are our APIs we are securing. It is used for identifies our APIs.
     .AddInMemoryApiResources(IdentityServer.ApiResources.GetApiResources())
     .AddInMemoryApiScopes(IdentityServer.ApiScopes.GetApiScopes())

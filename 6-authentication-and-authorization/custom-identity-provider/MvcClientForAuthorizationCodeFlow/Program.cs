@@ -30,6 +30,10 @@ builder.Services.AddAuthentication(config =>
 
     // response_type=code means that we're gonna get an authorization code back
     // which we can then exchange for ID token and token.
+
+    config.ResponseType = "code";
+
+    // FYI: OpenID automatically populates `scope` with `openid` scope value.
 });
 
 builder.Services.AddControllersWithViews();
