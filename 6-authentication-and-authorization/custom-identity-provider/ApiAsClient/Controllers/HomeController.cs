@@ -27,12 +27,14 @@ public class HomeController : ControllerBase
             "https://localhost:7193/",
             cancellationToken);
 
+        var scope = "catalog-api";
+
         var clientCredentialsTokenRequest = new ClientCredentialsTokenRequest
         {
             Address = discoveryDocument.TokenEndpoint,
             ClientId = Constants.Constants.ClientId,
             ClientSecret = Constants.Constants.ClientSecret,
-            Scope = "catalog-api"
+            Scope = scope
         };
 
         var tokenResponse = await identityServerClient.RequestClientCredentialsTokenAsync(
@@ -46,6 +48,17 @@ public class HomeController : ControllerBase
         // - ErrorDescription
         // - ExpiresIn
 
+        if (tokenResponse.IsError)
+        {
+            throw new Exception(
+                $"Failed to get an access token. " +
+                $"Error: {tokenResponse.Error}. " +
+                $"HttpErrorReason: {tokenResponse.HttpErrorReason}. " +
+                $"TokenEndpoint: '{discoveryDocument.TokenEndpoint}'. " +
+                $"ClientId: {Constants.Constants.ClientId}, " +
+                $"Scope: {scope}.");
+        }
+
         using var catalogApiClient = _httpClientFactory.CreateClient();
         catalogApiClient.SetBearerToken(tokenResponse.AccessToken);
 
@@ -54,7 +67,9 @@ public class HomeController : ControllerBase
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Failed to get data from the protected API. URL: {requestUri}.");
+            throw new Exception(
+                $"Failed to get data from the protected API. URL: '{requestUri}'. " +
+                $"AccessToken: '{tokenResponse.AccessToken}'.");
         }
 
         var responseData = await response.Content.ReadAsStringAsync(cancellationToken);
