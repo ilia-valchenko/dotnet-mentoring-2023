@@ -1,10 +1,10 @@
 ﻿using IdentityServer4.Models;
 
-namespace WebApplication;
+namespace IdentityServer;
 
 internal static class Clients
 {
-    public static IEnumerable<Client> Get()
+    public static IEnumerable<Client> GetClients()
     {
         return new List<Client>
         {

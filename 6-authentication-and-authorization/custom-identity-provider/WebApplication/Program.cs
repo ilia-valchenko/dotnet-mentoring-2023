@@ -1,16 +1,15 @@
 using IdentityServer4.Models;
 using IdentityServer4.Test;
-using WebApplication;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
-builder.Services.AddIdentityServer()
-    .AddInMemoryClients(WebApplication.Clients.Get())
-    .AddInMemoryIdentityResources(WebApplication.Resources.GetIdentityResources())
-    .AddInMemoryApiResources(WebApplication.Resources.GetApiResources())
-    .AddInMemoryApiScopes(WebApplication.Resources.GetApiScopes())
+builder.Services.AddIdentityServer() // AddIdentityServer() adds Authentication and Authorization.
+    .AddInMemoryClients(IdentityServer.Clients.GetClients())
+    .AddInMemoryIdentityResources(IdentityServer.IdentityResources.GetIdentityResources())
+    .AddInMemoryApiResources(IdentityServer.ApiResources.GetApiResources())
+    .AddInMemoryApiScopes(IdentityServer.ApiScopes.GetApiScopes())
     // AddTestUsers extension method adds support for the resource owner password grant.
-    .AddTestUsers(WebApplication.Users.Get())
+    .AddTestUsers(IdentityServer.Users.GetUsers())
     // It generate a certificate for signing tokens.
     .AddDeveloperSigningCredential();
 

@@ -2,13 +2,13 @@
 using IdentityServer4.Test;
 using System.Security.Claims;
 
-namespace WebApplication;
+namespace IdentityServer;
 
 internal static class Users
 {
     // RoleUser : IdentityUser
     // Add some data to claim. See: IProfileService.
-    public static List<TestUser> Get()
+    public static List<TestUser> GetUsers()
     {
         return new List<TestUser> {
             new TestUser {
