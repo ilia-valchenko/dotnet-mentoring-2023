@@ -14,9 +14,22 @@ builder.Services.AddAuthentication(config =>
 {
     config.ClientId = "my_client_id_mvc";
     config.ClientSecret = "TestClientMvcSecretValue";
+    config.Authority = "https://localhost:7193/";
     // We tell the app to save tokens and cookies.
     config.SaveTokens = true;
-    config.Authority = "https://localhost:7193/";
+
+    // The flows that we can use here:
+    // - Authorization Code Flow (response_type=code)
+    // - Implicit Flow (response_type=id_token OR response_type=id_token token)
+    // - Hybrid Flow (response_type=code token OR response_type=code id_token token)
+
+    // We will use Authorization Code Flow.
+    // Note: response_type != grant_type.
+    // The grant_type is a flow of access token request.
+    // The response_type is authorization flow type or maybe rather actually authentication.
+
+    // response_type=code means that we're gonna get an authorization code back
+    // which we can then exchange for ID token and token.
 });
 
 builder.Services.AddControllersWithViews();
