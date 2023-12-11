@@ -14,7 +14,7 @@ public class HomeController : ControllerBase
         _httpClientFactory = httpClientFactory;
     }
 
-    [HttpGet]
+    [HttpGet("secretresource")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
     {
         // 1. Retrieve an access token.
