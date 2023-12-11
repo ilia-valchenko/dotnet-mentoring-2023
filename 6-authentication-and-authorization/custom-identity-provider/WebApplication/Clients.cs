@@ -29,7 +29,7 @@ internal static class Clients
                 ClientId = "my_client_id",
                 ClientSecrets = new List<Secret> {new Secret("TestClientSecretValue".Sha256())},
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
-                AllowedScopes = new List<string> { "catalog-api" }
+                AllowedScopes = { "catalog-api" }
             }
         };
     }

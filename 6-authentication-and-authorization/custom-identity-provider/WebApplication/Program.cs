@@ -11,12 +11,12 @@ builder.Services
     // Before our clients start to be exist our IdentityServer needs to be aware of them.
     // They are clients which consume protected APIs.
     .AddInMemoryClients(IdentityServer.Clients.GetClients())
-    .AddInMemoryIdentityResources(IdentityServer.IdentityResources.GetIdentityResources())
+    //.AddInMemoryIdentityResources(IdentityServer.IdentityResources.GetIdentityResources())
     // It's our APIs. They are our APIs we are securing. It is used for identifies our APIs.
     .AddInMemoryApiResources(IdentityServer.ApiResources.GetApiResources())
     .AddInMemoryApiScopes(IdentityServer.ApiScopes.GetApiScopes())
     // AddTestUsers extension method adds support for the resource owner password grant.
-    .AddTestUsers(IdentityServer.Users.GetUsers())
+    //.AddTestUsers(IdentityServer.Users.GetUsers())
     // It generate a certificate for signing tokens.
     // It will create tempkey.jwk file in the solution.
     .AddDeveloperSigningCredential();
@@ -33,6 +33,6 @@ app.UseRouting();
 // such as the authorization and token endpoints.
 app.UseIdentityServer();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello! This is IdentityServer.");
 
 app.Run();

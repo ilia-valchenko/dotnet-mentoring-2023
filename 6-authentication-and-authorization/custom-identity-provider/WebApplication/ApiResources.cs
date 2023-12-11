@@ -26,7 +26,11 @@ internal static class ApiResources
 
         return new[]
         {
-            new ApiResource("catalog-api")
+            new ApiResource
+            {
+                Name = "catalog-api",
+                Scopes = { "catalog-api" }
+            }
         };
     }
 }

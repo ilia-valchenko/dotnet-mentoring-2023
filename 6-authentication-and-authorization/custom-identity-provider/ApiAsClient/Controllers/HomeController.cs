@@ -69,6 +69,7 @@ public class HomeController : ControllerBase
         {
             throw new Exception(
                 $"Failed to get data from the protected API. URL: '{requestUri}'. " +
+                $"ReasonPhrase: {response.ReasonPhrase}. " +
                 $"AccessToken: '{tokenResponse.AccessToken}'.");
         }
 

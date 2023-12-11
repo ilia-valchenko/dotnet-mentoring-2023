@@ -101,7 +101,6 @@ public class Startup
                 config.Authority = "https://localhost:7193/";
                 config.Audience = "catalog-api";
             });
-        // End
 
         #endregion
 
