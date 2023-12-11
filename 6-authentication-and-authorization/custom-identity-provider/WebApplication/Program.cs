@@ -3,6 +3,8 @@ using IdentityServer4.Test;
 
 var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
+// FYI: An API can also be a client. One API can talk to another API.
+
 builder.Services
     // AddIdentityServer() adds Authentication and Authorization.
     .AddIdentityServer()
