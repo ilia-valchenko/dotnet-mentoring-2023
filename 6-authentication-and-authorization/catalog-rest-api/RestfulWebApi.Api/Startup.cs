@@ -98,7 +98,7 @@ public class Startup
                 // Now we need to tell our API where to pass our access token
                 // in order to validate it.
                 // In my case this is URL of my custom IdentityServer.
-                config.Authority = "https://localhost:7193";
+                config.Authority = "https://localhost:7193/";
                 config.Audience = "catalog-api";
             });
         // End
