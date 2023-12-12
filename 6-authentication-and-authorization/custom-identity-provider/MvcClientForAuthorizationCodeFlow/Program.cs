@@ -6,6 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 // We will have to add OpenID Connect extension.
 builder.Services.AddAuthentication(config =>
 {
+    // The cookies I see in my browser:
+    // - .AspNetCore.Cookie // It's called "Cookie", but might be called "CustomCookieAuthenticationSchema" (see the code below).
+    // - .AspNetCore.CookieC1 // C1 and C2 stand for chunk. The cookie it too big. That's why it was splitted.
+    // - .AspNetCore.CookieC2
+    // - Identity.Cookie
+
+    // .AspNetCore.Cookie holds some state which references to this session
+    // holding our id_token and access_token.
+    // I can think about this cookie as about authentication for this client app (ASP.NET MVC app).
+    // The cookie holding the id_token which is used for authenticate the client
+    // and the access_token which is going to be used to authenticate with the API
+    // or another secured resource.
+
     config.DefaultScheme = "Cookie"; // "CustomCookieAuthenticationSchema"
     config.DefaultChallengeScheme = "oidc"; // "CustomOidcScheme"
 })
