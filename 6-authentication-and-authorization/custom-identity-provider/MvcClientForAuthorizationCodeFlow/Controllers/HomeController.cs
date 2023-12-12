@@ -143,7 +143,7 @@ public class HomeController : Controller
         return View(secretCategories);
     }
 
-    public async Task<IList<Models.Category>> GetSecretCategoriesFromCatalog(string accessToken, CancellationToken cancellationToken = default)
+    private async Task<IList<Models.Category>> GetSecretCategoriesFromCatalog(string accessToken, CancellationToken cancellationToken = default)
     {
         using var catalogApiClient = _httpClientFactory.CreateClient();
         catalogApiClient.SetBearerToken(accessToken);

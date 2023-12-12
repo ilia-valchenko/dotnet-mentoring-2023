@@ -62,7 +62,16 @@ public class Program
         // FYI: You won't see the claims below in id_token or access_token
         // the MVC client app receives. If you want to see the claims
         // in the id_token you need to modify IdentityResources.
+        // FYI: The claim below will be added to the identity token.
         userManager.AddClaimAsync(user, new Claim("mytest.myvalue", "big.cookie"))
+            .GetAwaiter()
+            .GetResult();
+
+        // NOTE: If we want our claims to be in the access_token
+        // we have to provide it in the constructor of the ApiResource.
+        // (see: ApiResources.cs)
+
+        userManager.AddClaimAsync(user, new Claim("mytest.api.myvalue", "big.api.cookie"))
             .GetAwaiter()
             .GetResult();
 

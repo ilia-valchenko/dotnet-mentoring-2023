@@ -78,7 +78,7 @@ builder.Services.AddAuthentication(config =>
     // request specific scopes defined in IdentityServer.
     //config.Scope.Clear();
     //config.Scope.Add("openid"); // Add mandatory 'openid' scope in case you clearing scopes.
-    config.Scope.Add("mytest.scope");
+    //config.Scope.Add("mytest.scope");
     config.Scope.Add("roles");
     config.Scope.Add("catalog-api");
 });

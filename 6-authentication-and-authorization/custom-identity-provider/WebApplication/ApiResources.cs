@@ -30,8 +30,23 @@ internal static class ApiResources
             new ApiResource
             {
                 Name = "catalog-api",
-                Scopes = { "catalog-api" }
+                Scopes = { "catalog-api" },
+                UserClaims =
+                {
+                    "role",
+                    //"mytest.api.myvalue"
+                }
             },
+            //// NOTE: If we want our claims to be in the access_token
+            //// we have to provide it in the constructor of the ApiResource.
+            //new ApiResource(
+            //    "catalog-api",
+            //    new string[]
+            //    {
+            //        "catalog-api",
+            //        "role",
+            //        "mytest.api.myvalue"
+            //    }),
             new ApiResource
             {
                 Name = "client-api",

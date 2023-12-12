@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -25,13 +26,14 @@ namespace RestfulWebApi.Api.Controllers
 
         [HttpGet("categories")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UseCase.DTOs.Category>))]
-        [Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        //[Authorize("readPolicy")]
+        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAllAsync(
             int pageNumber = DefaultPageNumber,
             int pageSize = DefaultPageSize,
             CancellationToken cancellationToken = default)
         {
+            var claims = User.Claims.ToList();
             var categories = await _categoryService.GetAllAsync(pageNumber, pageSize, cancellationToken);
             return Ok(categories);
         }
