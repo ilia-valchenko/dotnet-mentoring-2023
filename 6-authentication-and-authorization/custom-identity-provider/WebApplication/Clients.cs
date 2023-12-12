@@ -48,9 +48,9 @@ internal static class Clients
                     "client-api",
                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
-                    "mytest.myvalue"
+                    "mytest.scope"
                 },
-                //AlwaysIncludeUserClaimsInIdToken = true
+                AlwaysIncludeUserClaimsInIdToken = true
 
                 // How does 'AlwaysIncludeUserClaimsInIdToken = true' work?
                 // After receiving authorization code and exchanging it for

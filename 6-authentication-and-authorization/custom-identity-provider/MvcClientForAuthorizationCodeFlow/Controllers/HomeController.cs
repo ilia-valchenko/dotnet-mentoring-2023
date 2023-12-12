@@ -50,9 +50,30 @@ public class HomeController : Controller
         //        "pwd"
         //    ]
         //}
-        var idToken = await HttpContext.GetTokenAsync("id_token");
 
-        var _idToken = new JwtSecurityTokenHandler().ReadJwtToken(idToken);
+        //// The new id_token value after settingAlwaysIncludeUserClaimsInIdToken = true
+        //// in the IdentityServer.
+        //{
+        //    "nbf": 1702402602,
+        //    "exp": 1702402902,
+        //    "iss": "https://localhost:7193",
+        //    "aud": "my_client_id_mvc",
+        //    "nonce": "638379993944449073.MTI1MjU1YTMtZWU4MC00N2Q3LTkwODUtZWQzOWFmZTM0ZjIxNTUyNDJlYzItNTI3YS00YjAyLWE3ZTctNTk4OTcwYTgzMWE0",
+        //    "iat": 1702402602,
+        //    "at_hash": "g2NPztmgHE4QlV9CIzi3sg",
+        //    "s_hash": "Wt5afo7Deu0SBc-nIx9Jgg",
+        //    "sid": "BA1FE236F042FE866433535919BF52EB",
+        //    "sub": "76ff27db-76b3-42ff-b309-cc9d785eca48",
+        //    "auth_time": 1702402602,
+        //    "idp": "local",
+        //    "mytest.myvalue": "big.cookie", // LOOK AT THIS! This is my custom claim.
+        //    "preferred_username": "bob",
+        //    "name": "bob", // LOOK AT THIS! One more claim which was added to the id_token.
+        //    "amr": [
+        //        "pwd"
+        //    ]
+        //}
+        var idToken = await HttpContext.GetTokenAsync("id_token");
 
         //{
         //    "nbf": 1702360005, // When the token starts to being valid.
@@ -70,6 +91,28 @@ public class HomeController : Controller
         //        "profile"
         //    ],
         //    "amr": [ // Authentication methods.
+        //        "pwd"
+        //    ]
+        //}
+
+        //// *** Access token after adding and requesting the new scope ***
+        //{
+        //    "nbf": 1702402143,
+        //    "exp": 1702405743,
+        //    "iss": "https://localhost:7193",
+        //    "client_id": "my_client_id_mvc",
+        //    "sub": "c3f1b580-de02-4666-a571-abecb3e534ae",
+        //    "auth_time": 1702402143,
+        //    "idp": "local",
+        //    "jti": "08F3ADFB2AFDF7913A15A7E3B7B782D2",
+        //    "sid": "203D428E7D402866A496ABF355382984",
+        //    "iat": 1702402143,
+        //    "scope": [
+        //        "openid",
+        //        "profile",
+        //        "mytest.scope" // The new scope I requested.
+        //    ],
+        //    "amr": [
         //        "pwd"
         //    ]
         //}
