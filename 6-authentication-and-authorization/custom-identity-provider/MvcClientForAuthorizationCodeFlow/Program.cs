@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,11 @@ builder.Services.AddAuthentication(config =>
     // We tell the app to save tokens and cookies.
     config.SaveTokens = true;
 
+    // Configure cookie claim mapping.
+    config.ClaimActions.MapUniqueJsonKey("MyTest.Scope", "mytest.scope");
+    // JFYI: We can also delete a claim from my cookie session.
+    config.ClaimActions.DeleteClaim("arm");
+
     // The flows that we can use here:
     // - Authorization Code Flow (response_type=code)
     // - Implicit Flow (response_type=id_token OR response_type=id_token token)
@@ -55,6 +61,13 @@ builder.Services.AddAuthentication(config =>
     // FYI: OpenID automatically populates `scope`
     // with `openid` and 'profile' scope values
     // because they are mandatory according to OpenID specification.
+
+    // The code below will force our OpenIdconnect middleware
+    // doing another round trip after receiving the id_token
+    // in order to get additional claims.
+    // Two trips to load claims into the cookie,
+    // but the id_token is smaller.
+    config.GetClaimsFromUserInfoEndpoint = true;
 });
 
 builder.Services.AddControllersWithViews();

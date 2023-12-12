@@ -50,7 +50,9 @@ internal static class Clients
                     IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
                     "mytest.scope"
                 },
-                AlwaysIncludeUserClaimsInIdToken = true
+                // The code below will force our IdentityServer
+                // to put some claims in the id_token.
+                //AlwaysIncludeUserClaimsInIdToken = true
 
                 // How does 'AlwaysIncludeUserClaimsInIdToken = true' work?
                 // After receiving authorization code and exchanging it for

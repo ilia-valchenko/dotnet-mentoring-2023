@@ -28,7 +28,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Secret()
     {
         // Let's try to extract
-        // - id_token
+        // - id_token (It's just an authentication information rather than user information)
         // - access_token
         // - refresh_token (optional by specification)
 
@@ -116,6 +116,11 @@ public class HomeController : Controller
         //        "pwd"
         //    ]
         //}
+
+        // NOTE: I have added 'config.GetClaimsFromUserInfoEndpoint = true'
+        // in the Program.cs. It added some claims to my access_token,
+        // but I expected to see more claims. We need to configure mapping
+        // between the user endpoint and cookie.
         var accessToken = await HttpContext.GetTokenAsync("access_token");
 
         var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
