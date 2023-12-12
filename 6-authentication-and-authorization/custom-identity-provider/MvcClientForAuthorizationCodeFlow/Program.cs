@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddAuthentication(config =>
     // - .AspNetCore.Cookie // This is authentication session on the MVC side. It's called "Cookie", but might be called "CustomCookieAuthenticationSchema" (see the code below).
     // - .AspNetCore.CookieC1 // C1 and C2 stand for chunk. The cookie it too big. That's why it was splitted.
     // - .AspNetCore.CookieC2
-    // - Identity.Cookie // This is authentication session on my IdentityServer side. This names comes from the custom IdentityServer (see: config.Cookie.Name = "Identity.Cookie").
+    // - IdentityServer.Cookie // This is authentication session on my IdentityServer side. This names comes from the custom IdentityServer (see: config.Cookie.Name = "Identity.Cookie").
 
     // .AspNetCore.Cookie holds some state which references to this session
     // holding our id_token and access_token.
@@ -28,6 +29,7 @@ builder.Services.AddAuthentication(config =>
 // BTW. This is OIDC. This middleware knows how to retrieve the discovery document.
 .AddOpenIdConnect("oidc" /*"CustomOidcScheme"*/, config =>
 {
+    config.SignInScheme = "Cookie";
     config.ClientId = "my_client_id_mvc";
     config.ClientSecret = "TestClientMvcSecretValue";
     config.Authority = "https://localhost:7193/";
@@ -35,9 +37,16 @@ builder.Services.AddAuthentication(config =>
     config.SaveTokens = true;
 
     // Configure cookie claim mapping.
-    config.ClaimActions.MapUniqueJsonKey("MyTest.Scope", "mytest.scope");
+    config.ClaimActions.MapUniqueJsonKey("mytest.myvalue", "mytest.myvalue");
+    config.ClaimActions.MapUniqueJsonKey("role", "role");
     // JFYI: We can also delete a claim from my cookie session.
-    config.ClaimActions.DeleteClaim("arm");
+    config.ClaimActions.DeleteClaim("amr");
+    config.ClaimActions.DeleteClaim("s_hash");
+
+    config.TokenValidationParameters = new TokenValidationParameters
+    {
+        RoleClaimType = "role"
+    };
 
     // The flows that we can use here:
     // - Authorization Code Flow (response_type=code)
@@ -54,10 +63,6 @@ builder.Services.AddAuthentication(config =>
 
     config.ResponseType = "code";
 
-    // By using the code below we forcing our client to
-    // request specific scopes defined in IdentityServer.
-    config.Scope.Add("mytest.scope");
-
     // FYI: OpenID automatically populates `scope`
     // with `openid` and 'profile' scope values
     // because they are mandatory according to OpenID specification.
@@ -68,6 +73,13 @@ builder.Services.AddAuthentication(config =>
     // Two trips to load claims into the cookie,
     // but the id_token is smaller.
     config.GetClaimsFromUserInfoEndpoint = true;
+
+    // By using the code below we forcing our client to
+    // request specific scopes defined in IdentityServer.
+    //config.Scope.Clear();
+    //config.Scope.Add("openid");
+    config.Scope.Add("mytest.scope");
+    config.Scope.Add("roles");
 });
 
 builder.Services.AddControllersWithViews();

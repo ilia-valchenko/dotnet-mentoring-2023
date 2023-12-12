@@ -44,7 +44,8 @@ internal static class IdentityResources
                     // I defined this claim in the Program.cs
                     "mytest.myvalue"
                 }
-            }
+            },
+            new IdentityResource("roles", "User role(s)", new List<string> { "role" })
         };
     }
 }

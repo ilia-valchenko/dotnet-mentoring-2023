@@ -36,7 +36,7 @@ public class Startup
 
         services.ConfigureApplicationCookie(config =>
         {
-            config.Cookie.Name = "Identity.Cookie";
+            config.Cookie.Name = "IdentityServer.Cookie";
             config.LoginPath = "/Auth/Login";
         });
 

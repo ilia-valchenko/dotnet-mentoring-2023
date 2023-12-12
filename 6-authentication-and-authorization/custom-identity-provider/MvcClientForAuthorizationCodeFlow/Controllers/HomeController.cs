@@ -24,7 +24,9 @@ public class HomeController : Controller
     //    &response_mode=form_post
     //    &nonce=638379163989015268.Yjc3MDlmNzQtMWE3MC00ZGU0LWJkZjQtMTQyOGEyYjQwNjU4NGY0MTJiYTAtMTQ2Ni00MWEwLWFjYjMtODRlNTBjYTFmZjFl
     //    &state=CfDJ8Gbrtnk6qZFAsrdxVOBx3dVy0wdJg5OOM9lO8n0JTrhsdMgZeLGEyNyI35-nRRurg9HaBVPNiM7y7oWM1joqpmwDevMhgCZidExDY
-    [Authorize]
+
+    //[Authorize]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Secret()
     {
         // Let's try to extract

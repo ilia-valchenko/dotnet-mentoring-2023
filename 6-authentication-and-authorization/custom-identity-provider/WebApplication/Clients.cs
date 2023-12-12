@@ -48,10 +48,11 @@ internal static class Clients
                     "client-api",
                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
-                    "mytest.scope"
+                    "mytest.scope",
+                    "roles"
                 },
-                // The code below will force our IdentityServer
-                // to put some claims in the id_token.
+                //// The code below will force our IdentityServer
+                //// to put some claims in the id_token.
                 //AlwaysIncludeUserClaimsInIdToken = true
 
                 // How does 'AlwaysIncludeUserClaimsInIdToken = true' work?

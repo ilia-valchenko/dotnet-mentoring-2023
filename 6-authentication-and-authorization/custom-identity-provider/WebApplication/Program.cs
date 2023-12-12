@@ -66,7 +66,7 @@ public class Program
             .GetAwaiter()
             .GetResult();
 
-        userManager.AddClaimAsync(user, new Claim("mytest.api.myvalue", "big.api.cookie"))
+        userManager.AddClaimAsync(user, new Claim("role", "manager"))
             .GetAwaiter()
             .GetResult();
 
