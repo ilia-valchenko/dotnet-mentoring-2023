@@ -6,16 +6,22 @@ using static IdentityServer4.Models.IdentityResources;
 using static System.Formats.Asn1.AsnWriter;
 using static System.Net.WebRequestMethods;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
+using System.Text;
 
 namespace IdentityServer.Controllers;
 
 public class AuthController : Controller
 {
+    private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
 
     public AuthController(
+        Microsoft.AspNetCore.Identity.UserManager<IdentityUser> userManager,
         Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager)
     {
+        _userManager = userManager;
         _signInManager = signInManager;
     }
 
@@ -83,5 +89,47 @@ public class AuthController : Controller
         }
 
         return View();
+    }
+
+    [HttpGet]
+    public IActionResult Register(string returnUrl)
+    {
+        return View(new RegisterViewModel
+        {
+            ReturnUrl = returnUrl
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Errors will be attached automatically.
+            return View(registerViewModel);
+        }
+
+        var user = new IdentityUser(registerViewModel.Username);
+        var identityResult = await _userManager.CreateAsync(user, registerViewModel.Password);
+
+        if (identityResult.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, false);
+            return Redirect(registerViewModel.ReturnUrl);
+        }
+        else
+        {
+            var stringBuilder = new StringBuilder("Failed to register a new user. ");
+
+            if (identityResult.Errors != null && identityResult.Errors.Any())
+            {
+                foreach (var error in identityResult.Errors)
+                {
+                    stringBuilder.Append($"Code: {error.Code}. Decription: {error.Description}. ");
+                }
+            }
+
+            throw new Exception(stringBuilder.ToString());
+        }
     }
 }
