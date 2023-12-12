@@ -47,8 +47,18 @@ internal static class Clients
                     "catalog-api",
                     "client-api",
                     IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile
-                }
+                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
+                    "mytest.myvalue"
+                },
+                //AlwaysIncludeUserClaimsInIdToken = true
+
+                // How does 'AlwaysIncludeUserClaimsInIdToken = true' work?
+                // After receiving authorization code and exchanging it for
+                // id_token and access_token. There is another call to
+                // the user endpoint which requets user information.
+                // And this is how it receives additional claims.
+                // As far as I understood, it will add user claims to
+                // the id_token not access_token.
             }
         };
     }

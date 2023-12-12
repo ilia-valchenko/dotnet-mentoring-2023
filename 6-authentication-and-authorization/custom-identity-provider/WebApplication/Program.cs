@@ -59,11 +59,14 @@ public class Program
             .GetAwaiter()
             .GetResult();
 
-        userManager.AddClaimAsync(user, new Claim("rc.garndma", "big.cookie"))
+        // FYI: You won't see the claims below in id_token or access_token
+        // the MVC client app receives. If you want to see the claims
+        // in the id_token you need to modify IdentityResources.
+        userManager.AddClaimAsync(user, new Claim("mytest.myvalue", "big.cookie"))
             .GetAwaiter()
             .GetResult();
 
-        userManager.AddClaimAsync(user, new Claim("rc.api.garndma", "big.api.cookie"))
+        userManager.AddClaimAsync(user, new Claim("mytest.api.myvalue", "big.api.cookie"))
             .GetAwaiter()
             .GetResult();
 

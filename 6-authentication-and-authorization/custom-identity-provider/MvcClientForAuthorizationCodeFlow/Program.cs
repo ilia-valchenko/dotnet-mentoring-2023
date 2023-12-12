@@ -48,6 +48,10 @@ builder.Services.AddAuthentication(config =>
 
     config.ResponseType = "code";
 
+    // By using the code below we forcing our client to
+    // request specific scopes defined in IdentityServer.
+    config.Scope.Add("mytest.myvalue");
+
     // FYI: OpenID automatically populates `scope`
     // with `openid` and 'profile' scope values
     // because they are mandatory according to OpenID specification.
