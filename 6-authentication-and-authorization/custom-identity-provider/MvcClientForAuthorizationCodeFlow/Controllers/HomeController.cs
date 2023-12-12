@@ -1,4 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Threading;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +10,13 @@ namespace MvcClientForAuthorizationCodeFlow.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public HomeController(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
     public IActionResult Index()
     {
         return View();
@@ -127,6 +137,29 @@ public class HomeController : Controller
 
         var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
-        return View();
+        
+        var secretCategories = await GetSecretCategoriesFromCatalog(accessToken);
+
+        return View(secretCategories);
+    }
+
+    public async Task<IList<Models.Category>> GetSecretCategoriesFromCatalog(string accessToken, CancellationToken cancellationToken = default)
+    {
+        using var catalogApiClient = _httpClientFactory.CreateClient();
+        catalogApiClient.SetBearerToken(accessToken);
+
+        var requestUri = "http://localhost:5000/api/v1/categories?pageNumber=1&pageSize=5";
+        var response = await catalogApiClient.GetAsync(requestUri, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(
+                $"Failed to get data from the protected API. URL: '{requestUri}'. " +
+                $"ReasonPhrase: {response.ReasonPhrase}. " +
+                $"AccessToken: '{accessToken}'.");
+        }
+
+        var responseData = await response.Content.ReadAsStringAsync(cancellationToken);
+        return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Models.Category>>(responseData);
     }
 }

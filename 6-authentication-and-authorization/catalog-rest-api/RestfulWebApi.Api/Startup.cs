@@ -102,6 +102,12 @@ public class Startup
                 config.Audience = "catalog-api";
             });
 
+        services.AddCors(confg =>
+                confg.AddPolicy("AllowAll",
+                    p => p.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()));
+
         #endregion
 
         services.AddSwaggerGen(option =>
@@ -159,6 +165,8 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RestfulWebApi.Api v1"));
         }
+
+        app.UseCors("AllowAll");
 
         app.UseRouting();
         app.UseAuthentication();

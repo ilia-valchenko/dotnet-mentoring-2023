@@ -80,9 +80,12 @@ builder.Services.AddAuthentication(config =>
     //config.Scope.Add("openid"); // Add mandatory 'openid' scope in case you clearing scopes.
     config.Scope.Add("mytest.scope");
     config.Scope.Add("roles");
+    config.Scope.Add("catalog-api");
 });
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
