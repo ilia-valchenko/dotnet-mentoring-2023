@@ -30,6 +30,7 @@ internal static class Clients
             {
                 ClientId = "my_client_id",
                 ClientSecrets = new List<Secret> {new Secret("TestClientSecretValue".Sha256())},
+                // 'ClientCredentials' type is used for machine to machine communication.
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 AllowedScopes = { "catalog-api" }
             },
@@ -40,6 +41,7 @@ internal static class Clients
                 // 'Code' stands for Authorization Code Flow.
                 AllowedGrantTypes = GrantTypes.Code,
                 RedirectUris = { "https://localhost:7240/signin-oidc" },
+                RequireConsent = false,
                 AllowedScopes =
                 {
                     "catalog-api",

@@ -29,7 +29,7 @@ public class Startup
             config.Password.RequireDigit = false;
             config.Password.RequireNonAlphanumeric = false;
             config.Password.RequireUppercase = false;
-            config.SignIn.RequireConfirmedEmail = true;
+            //config.SignIn.RequireConfirmedEmail = true;
         })
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
@@ -45,6 +45,9 @@ public class Startup
         services
             // AddIdentityServer() adds Authentication and Authorization.
             .AddIdentityServer()
+            // Now IdentityServer will be aware of the user
+            // and how to query for this model.
+            .AddAspNetIdentity<IdentityUser>()
             // Before our clients start to be exist our IdentityServer needs to be aware of them.
             // They are clients which consume protected APIs.
             .AddInMemoryClients(IdentityServer.Clients.GetClients())

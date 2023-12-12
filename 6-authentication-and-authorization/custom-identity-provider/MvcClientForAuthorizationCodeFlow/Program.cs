@@ -7,12 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(config =>
 {
     config.DefaultScheme = "Cookie"; // "CustomCookieAuthenticationSchema"
-    config.DefaultChallengeScheme = "CustomOidcScheme";
+    config.DefaultChallengeScheme = "oidc"; // "CustomOidcScheme"
 })
 .AddCookie("Cookie" /*"CustomCookieAuthenticationSchema"*/)
 // Instead of having an access token only we will also have an id token.
 // BTW. This is OIDC. This middleware knows how to retrieve the discovery document.
-.AddOpenIdConnect("CustomOidcScheme", config =>
+.AddOpenIdConnect("oidc" /*"CustomOidcScheme"*/, config =>
 {
     config.ClientId = "my_client_id_mvc";
     config.ClientSecret = "TestClientMvcSecretValue";
