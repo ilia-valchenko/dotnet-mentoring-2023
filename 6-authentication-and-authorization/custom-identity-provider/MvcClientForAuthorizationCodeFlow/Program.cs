@@ -7,10 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(config =>
 {
     // The cookies I see in my browser:
-    // - .AspNetCore.Cookie // It's called "Cookie", but might be called "CustomCookieAuthenticationSchema" (see the code below).
+    // - .AspNetCore.Cookie // This is authentication session on the MVC side. It's called "Cookie", but might be called "CustomCookieAuthenticationSchema" (see the code below).
     // - .AspNetCore.CookieC1 // C1 and C2 stand for chunk. The cookie it too big. That's why it was splitted.
     // - .AspNetCore.CookieC2
-    // - Identity.Cookie
+    // - Identity.Cookie // This is authentication session on my IdentityServer side. This names comes from the custom IdentityServer (see: config.Cookie.Name = "Identity.Cookie").
 
     // .AspNetCore.Cookie holds some state which references to this session
     // holding our id_token and access_token.
@@ -49,7 +49,8 @@ builder.Services.AddAuthentication(config =>
     config.ResponseType = "code";
 
     // FYI: OpenID automatically populates `scope`
-    // with `openid` and 'profile' scope values.
+    // with `openid` and 'profile' scope values
+    // because they are mandatory according to OpenID specification.
 });
 
 builder.Services.AddControllersWithViews();
