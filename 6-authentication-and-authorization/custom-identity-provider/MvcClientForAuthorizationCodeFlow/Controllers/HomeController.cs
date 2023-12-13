@@ -145,6 +145,8 @@ public class HomeController : Controller
 
         var secretCategories = await GetSecretCategoriesFromCatalog(accessToken);
 
+        // NOTE: The method call below is optional.
+        // It's just an example of usage of the refresh_token.
         await RefreshAccessTokenAsync();
 
         return View(secretCategories);
