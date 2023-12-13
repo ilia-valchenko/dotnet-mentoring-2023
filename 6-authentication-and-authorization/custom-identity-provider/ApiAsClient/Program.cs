@@ -36,4 +36,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
+app.UsePathBase("/swagger");
+
 app.Run();
