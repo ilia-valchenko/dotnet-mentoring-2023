@@ -62,7 +62,7 @@ public class HomeController : ControllerBase
         using var catalogApiClient = _httpClientFactory.CreateClient();
         catalogApiClient.SetBearerToken(tokenResponse.AccessToken);
 
-        var requestUri = "http://localhost:5000/api/v1/categories?pageNumber=1&pageSize=5";
+        var requestUri = "http://localhost:5000/api/v1/products?pageNumber=1&pageSize=5";
         var response = await catalogApiClient.GetAsync(requestUri, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
@@ -74,7 +74,7 @@ public class HomeController : ControllerBase
         }
 
         var responseData = await response.Content.ReadAsStringAsync(cancellationToken);
-        var deserializedData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(responseData);
+        var deserializedData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Product>>(responseData);
 
         return Ok(new
         {

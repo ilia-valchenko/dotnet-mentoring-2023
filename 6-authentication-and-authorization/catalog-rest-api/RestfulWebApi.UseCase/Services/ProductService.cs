@@ -35,7 +35,8 @@ namespace RestfulWebApi.UseCase.Services
             var product = _mapper.Map<DTOs.Product>(productToCreate);
             product.Id = Guid.NewGuid();
 
-            var createdProduct = await _repository.CreateAsync(_mapper.Map<Domain.Entities.Product>(product), cancellationToken);
+            var productEntity = _mapper.Map<Domain.Entities.Product>(product);
+            var createdProduct = await _repository.CreateAsync(productEntity, cancellationToken);
             return _mapper.Map<DTOs.Product>(createdProduct);
         }
 
