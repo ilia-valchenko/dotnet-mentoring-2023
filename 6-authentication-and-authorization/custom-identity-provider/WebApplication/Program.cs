@@ -53,7 +53,23 @@ public class Program
 
         using var scope = host.Services.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-        var user = new IdentityUser("bob");
+
+        CreateManagerUser(userManager);
+        CreateBuyerUser(userManager);
+
+        host.Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
+
+    private static void CreateManagerUser(UserManager<IdentityUser> userManager)
+    {
+        var user = new IdentityUser("manager");
 
         userManager.CreateAsync(user, "password")
             .GetAwaiter()
@@ -78,14 +94,34 @@ public class Program
         userManager.AddClaimAsync(user, new Claim("role", "manager"))
             .GetAwaiter()
             .GetResult();
-
-        host.Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+    private static void CreateBuyerUser(UserManager<IdentityUser> userManager)
+    {
+        var user = new IdentityUser("buyer");
+
+        userManager.CreateAsync(user, "password")
+            .GetAwaiter()
+            .GetResult();
+
+        // FYI: You won't see the claims below in id_token or access_token
+        // the MVC client app receives. If you want to see the claims
+        // in the id_token you need to modify IdentityResources.
+        // FYI: The claim below will be added to the identity token.
+        userManager.AddClaimAsync(user, new Claim("mytest.myvalue", "big.cookie"))
+            .GetAwaiter()
+            .GetResult();
+
+        // NOTE: If we want our claims to be in the access_token
+        // we have to provide it in the constructor of the ApiResource.
+        // (see: ApiResources.cs)
+
+        userManager.AddClaimAsync(user, new Claim("mytest.api.myvalue", "big.api.cookie"))
+            .GetAwaiter()
+            .GetResult();
+
+        userManager.AddClaimAsync(user, new Claim("role", "buyer"))
+            .GetAwaiter()
+            .GetResult();
+    }
 }

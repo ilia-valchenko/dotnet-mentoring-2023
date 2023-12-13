@@ -36,7 +36,7 @@ public class HomeController : Controller
     //    &state=CfDJ8Gbrtnk6qZFAsrdxVOBx3dVy0wdJg5OOM9lO8n0JTrhsdMgZeLGEyNyI35-nRRurg9HaBVPNiM7y7oWM1joqpmwDevMhgCZidExDY
 
     //[Authorize]
-    [Authorize(Roles = "manager")]
+    [Authorize(Roles = "manager, buyer")]
     public async Task<IActionResult> Secret()
     {
         // Let's try to extract
@@ -137,7 +137,6 @@ public class HomeController : Controller
 
         var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
-        
         var secretCategories = await GetSecretCategoriesFromCatalog(accessToken);
 
         return View(secretCategories);
