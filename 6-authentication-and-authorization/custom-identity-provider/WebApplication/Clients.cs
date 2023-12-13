@@ -1,4 +1,6 @@
 ﻿using IdentityServer4.Models;
+using static IdentityServer4.Models.IdentityResources;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace IdentityServer;
 
@@ -62,6 +64,11 @@ internal static class Clients
                 // And this is how it receives additional claims.
                 // As far as I understood, it will add user claims to
                 // the id_token not access_token.
+
+                // Here I'm trying to configure the IdentityServer to make it
+                // using refresh tokens.
+                // We need to specify offline_access scope if order to get a refresh_token according to OpenID spec.
+                AllowOfflineAccess = true
             }
         };
     }

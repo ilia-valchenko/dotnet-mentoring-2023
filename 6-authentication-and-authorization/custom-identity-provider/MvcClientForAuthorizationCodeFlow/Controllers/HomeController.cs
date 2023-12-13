@@ -1,10 +1,14 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using static IdentityModel.OidcConstants;
 
 namespace MvcClientForAuthorizationCodeFlow.Controllers;
 
@@ -129,15 +133,19 @@ public class HomeController : Controller
         //    ]
         //}
 
-        // NOTE: I have added 'config.GetClaimsFromUserInfoEndpoint = true'
-        // in the Program.cs. It added some claims to my access_token,
+        // NOTE: I have added 'config.GetClaimsFromUserInfoEndpoint = true' (see: Program.cs)
+        // It added some claims to my access_token,
         // but I expected to see more claims. We need to configure mapping
         // between the user endpoint and cookie.
         var accessToken = await HttpContext.GetTokenAsync("access_token");
 
+        // The refresh_token can be used for exchanging for an access_token
+        // by sending it to the Token endpoint.
         var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
         var secretCategories = await GetSecretCategoriesFromCatalog(accessToken);
+
+        await RefreshAccessTokenAsync();
 
         return View(secretCategories);
     }
@@ -160,5 +168,45 @@ public class HomeController : Controller
 
         var responseData = await response.Content.ReadAsStringAsync(cancellationToken);
         return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Models.Category>>(responseData);
+    }
+
+    private async Task RefreshAccessTokenAsync(CancellationToken cancellationToken = default)
+    {
+        using var identityServerClient = _httpClientFactory.CreateClient();
+
+        // This document contains all information we need about our IdentityServer.
+        var discoveryDocument = await identityServerClient.GetDiscoveryDocumentAsync(
+            "https://localhost:7193/",
+            cancellationToken);
+
+        var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+        using var refreshTokenClient = _httpClientFactory.CreateClient();
+
+        var tokenResponse = await refreshTokenClient.RequestRefreshTokenAsync(
+            new RefreshTokenRequest
+            {
+                Address = discoveryDocument.TokenEndpoint,
+                RefreshToken = refreshToken,
+                ClientId = "my_client_id_mvc",
+                ClientSecret = "TestClientMvcSecretValue"
+            },
+            cancellationToken);
+
+        if (tokenResponse.IsError)
+        {
+            throw new Exception($"Failed to get a refreshed token. " +
+                $"ErrorType: '{tokenResponse.ErrorType.ToString()}'. " +
+                $"HttpErrorReason: {tokenResponse.HttpErrorReason}. " +
+                $"Error: {tokenResponse.Error}. " +
+                $"Exception: {tokenResponse.Exception?.ToString()}.");
+        }
+
+        var authInfo = await HttpContext.AuthenticateAsync("Cookie");
+
+        authInfo.Properties.UpdateTokenValue("id_token", tokenResponse.IdentityToken);
+        authInfo.Properties.UpdateTokenValue("access_token", tokenResponse.AccessToken);
+        authInfo.Properties.UpdateTokenValue("refresh_token", tokenResponse.RefreshToken);
+
+        await HttpContext.SignInAsync("Cookie", authInfo.Principal, authInfo.Properties);
     }
 }

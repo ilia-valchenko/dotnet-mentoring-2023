@@ -81,6 +81,8 @@ builder.Services.AddAuthentication(config =>
     //config.Scope.Add("mytest.scope");
     config.Scope.Add("roles");
     config.Scope.Add("catalog-api");
+    // We need to specify offline_access scope if order to get a refresh_token according to OpenID spec.
+    config.Scope.Add("offline_access");
 });
 
 builder.Services.AddControllersWithViews();
