@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityModel;
+using IdentityServer4.Models;
 
 namespace IdentityServer;
 
@@ -45,7 +46,7 @@ internal static class IdentityResources
                     "mytest.myvalue"
                 }
             },
-            new IdentityResource("roles", "User role(s)", new List<string> { "role" })
+            new IdentityResource("roles", "User role(s)", new List<string> { JwtClaimTypes.Role })
         };
     }
 }
