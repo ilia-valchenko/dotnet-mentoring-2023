@@ -1,0 +1,10 @@
+﻿<h1>JavaScript client (Implicit Flow)</h1>
+
+@* Before we make an authorization request we need to authenticate with an IdentityServer.
+We have to craft the value for the Return URL and once we log in the Return URL
+is gonna send it to Authorization endpoint where the callback parameter is set
+to whatever we need to return. *@
+
+<button onclick="signIn()">SignIn</button>
+
+<script src="~/sign-in.js"></script>

@@ -69,6 +69,29 @@ internal static class Clients
                 // using refresh tokens.
                 // We need to specify offline_access scope if order to get a refresh_token according to OpenID spec.
                 AllowOfflineAccess = true
+            },
+            new Client
+            {
+                ClientId = "client_id_js",
+                AllowedGrantTypes = GrantTypes.Implicit,
+                RedirectUris = { "https://localhost:7268/home/signin" },
+                RequireConsent = false,
+                AllowedCorsOrigins = { "https://localhost:7268" },
+                RequireClientSecret = false,
+                AllowedScopes =
+                {
+                    "catalog-api",
+                    IdentityServer4.IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServer4.IdentityServerConstants.StandardScopes.Profile,
+                    "roles"
+                },
+                // We need to tell explicitly that we are allowed
+                // to pass token in browser.
+                AllowAccessTokensViaBrowser = true,
+
+                AccessTokenLifetime = 1
+
+                // FYI: We can't allow offline access with the Implicit Flow.
             }
         };
     }
