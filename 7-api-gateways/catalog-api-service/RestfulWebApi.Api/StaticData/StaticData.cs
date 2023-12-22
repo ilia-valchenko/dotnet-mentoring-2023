@@ -10,7 +10,7 @@ namespace RestfulWebApi.Api.StaticData
         private const int NumberOfCategories = 5;
         private const int NumberOfProducts = 3;
 
-        private static List<Category> _categories = new List<Category>();
+        private static IList<Category> _categories = new List<Category>();
 
         static StaticData()
         {
@@ -44,12 +44,12 @@ namespace RestfulWebApi.Api.StaticData
             }
         }
 
-        public static List<Category> GetAllCategories()
+        public static IList<Category> GetAllCategories()
         {
             return _categories;
         }
 
-        public static List<Product> GetAllProducts()
+        public static IList<Product> GetAllProducts()
         {
             var products = new List<Product>();
 
@@ -61,6 +61,18 @@ namespace RestfulWebApi.Api.StaticData
             return products;
         }
 
+        public static Product GetProductById(Guid id)
+        {
+            var products = GetAllProducts();
+            return products.SingleOrDefault(p => p.Id == id);
+        }
+
+        public static IList<Product> GetProductsByCategoryId(Guid categoryId)
+        {
+            var category = GetCategoryById(categoryId);
+            return category.Products;
+        }
+
         public static Category GetCategoryById(Guid id)
         {
             return _categories.SingleOrDefault(c => c.Id == id);
@@ -69,6 +81,11 @@ namespace RestfulWebApi.Api.StaticData
         public static void CreateCategory(Category category)
         {
             _categories.Add(category);
+        }
+
+        public static void DeleteCategory(Guid id)
+        {
+            _categories.Remove(_categories.Single(c => c.Id == id));
         }
     }
 }

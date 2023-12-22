@@ -87,25 +87,45 @@ namespace RestfulWebApi.Api.Controllers
             return Ok();
         }
 
-        //[HttpPatch("categories/{id:Guid}")]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPatch("categories/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
         //[Authorize(Roles = "manager")]
-        //public async Task<IActionResult> UpdateAsync(Guid id, UpdateCategory categoryToUpdate, CancellationToken cancellationToken = default)
-        //{
-        //    var updatedCategory = await _categoryService.UpdateAsync(id, categoryToUpdate, cancellationToken);
-        //    return new OkObjectResult(updatedCategory);
-        //}
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateAsync(Guid id, UpdateCategory categoryToUpdate, CancellationToken cancellationToken = default)
+        {
+            var category = StaticData.StaticData.GetCategoryById(id);
 
-        //[HttpDelete("categories/{id:Guid}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+            if (categoryToUpdate.ParentCategoryId != null)
+            {
+                category.ParentCategoryId = categoryToUpdate.ParentCategoryId;
+            }
+
+            if (!string.IsNullOrWhiteSpace(categoryToUpdate.Name))
+            {
+                category.Name = categoryToUpdate.Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(categoryToUpdate.ImageUrlText))
+            {
+                category.ImageUrlText = categoryToUpdate.ImageUrlText;
+            }
+
+            return new OkObjectResult(category);
+        }
+
+        [HttpDelete("categories/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
         //[Authorize(Roles = "manager")]
-        //public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
-        //{
-        //    await _categoryService.DeleteAsync(id, cancellationToken);
-        //    return new OkResult();
-        //}
+        [AllowAnonymous]
+        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            StaticData.StaticData.DeleteCategory(id);
+            return new OkResult();
+        }
     }
 }
