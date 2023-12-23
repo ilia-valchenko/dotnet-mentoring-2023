@@ -63,7 +63,19 @@ namespace RestfulWebApi.Api.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> CreateAsync(Guid categoryId, CreateProduct productToCreate, CancellationToken cancellationToken = default)
         {
-            var createdProduct = await _productService.CreateAsync(productToCreate, cancellationToken);
+            var category = StaticData.StaticData.GetCategoryById(categoryId);
+
+            category.Products.Add(new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = productToCreate.Name,
+                CategoryId = category.Id,
+                ImageUrlText = productToCreate.ImageUrlText,
+                Description = productToCreate.Description,
+                Amount = productToCreate.Amount,
+                Price = productToCreate.Price
+            });
+
             return Ok();
         }
 
@@ -79,8 +91,34 @@ namespace RestfulWebApi.Api.Controllers
             UpdateProduct productToUpdate,
             CancellationToken cancellationToken = default)
         {
-            var updatedProduct = await _productService.UpdateAsync(productId, productToUpdate, cancellationToken);
-            return new OkObjectResult(updatedProduct);
+            var product = StaticData.StaticData.GetProductById(productId);
+
+            if (!string.IsNullOrWhiteSpace(productToUpdate.Name))
+            {
+                product.Name = productToUpdate.Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(productToUpdate.ImageUrlText))
+            {
+                product.ImageUrlText = productToUpdate.ImageUrlText;
+            }
+
+            if (!string.IsNullOrWhiteSpace(productToUpdate.Description))
+            {
+                product.Description = productToUpdate.Description;
+            }
+
+            if (productToUpdate.Price != null)
+            {
+                product.Price = productToUpdate.Price.Value;
+            }
+
+            if (productToUpdate.Amount != null)
+            {
+                product.Amount = productToUpdate.Amount.Value;
+            }
+
+            return new OkObjectResult(product);
         }
 
         [HttpDelete("categories/{categoryId:Guid}/products/{productId:Guid}")]
@@ -90,7 +128,11 @@ namespace RestfulWebApi.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> DeleteAsync(Guid categoryId, Guid productId, CancellationToken cancellationToken = default)
         {
-            await _productService.DeleteAsync(productId, cancellationToken);
+            var product = StaticData.StaticData.GetProductById(productId);
+            var category = StaticData.StaticData.GetCategoryById(categoryId);
+
+            category.Products.Remove(product);
+
             return new OkResult();
         }
     }
