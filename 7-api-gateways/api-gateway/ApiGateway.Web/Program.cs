@@ -1,3 +1,4 @@
+using ApiGateway.Web.Aggregators;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -9,7 +10,9 @@ builder.Configuration.AddJsonFile("ocelot.json", false, true);
 // You could call another more extended AddOcelotUsingBuilder method while
 // configuring services to build and use custom builder via an IMvcCoreBuilder interface object.
 // See: https://ocelot.readthedocs.io/en/latest/features/dependencyinjection.html
-builder.Services.AddOcelot();
+builder.Services
+    .AddOcelot()
+    .AddTransientDefinedAggregator<ManufacturerProductAggregator>();
 
 var app = builder.Build();
 
