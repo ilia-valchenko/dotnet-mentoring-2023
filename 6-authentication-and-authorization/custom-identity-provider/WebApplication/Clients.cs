@@ -97,10 +97,10 @@ internal static class Clients
             {
                 ClientId = "api_gateway_client_id",
                 ClientSecrets = new List<Secret> {new Secret("TestClientSecretValue".Sha256())},
-                //RequireClientSecret = false,
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                 AllowedScopes = {
                     "api-gateway-api",
+                    "catalog-api",
                     "roles"
                 },
                 AccessTokenLifetime = 3600
