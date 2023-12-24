@@ -51,6 +51,15 @@ internal static class ApiResources
             {
                 Name = "client-api",
                 Scopes = { "client-api" }
+            },
+            new ApiResource
+            {
+                Name = "API Gateway API resource", // This value will be used as "aud" field value in the JWT.
+                Scopes = { "api-gateway-api" },
+                UserClaims =
+                {
+                    "role"
+                }
             }
         };
     }

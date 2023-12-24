@@ -92,7 +92,19 @@ internal static class Clients
                 AccessTokenLifetime = 1
 
                 // FYI: We can't allow offline access with the Implicit Flow.
-            }
+            },
+            new Client
+            {
+                ClientId = "api_gateway_client_id",
+                ClientSecrets = new List<Secret> {new Secret("TestClientSecretValue".Sha256())},
+                //RequireClientSecret = false,
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                AllowedScopes = {
+                    "api-gateway-api",
+                    "roles"
+                },
+                AccessTokenLifetime = 3600
+            },
         };
     }
 }
