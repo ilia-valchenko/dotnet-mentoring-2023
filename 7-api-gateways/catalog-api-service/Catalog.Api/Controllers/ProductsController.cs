@@ -22,8 +22,7 @@ namespace Catalog.Api.Controllers
 
         [HttpGet("products")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<Product>))]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetAsync([FromQuery]Guid? manufacturerId, CancellationToken cancellationToken = default)
         {
             IEnumerable<Product> products = StaticData.StaticData.GetAllProducts();
@@ -38,8 +37,7 @@ namespace Catalog.Api.Controllers
 
         [HttpGet("products/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var product = StaticData.StaticData.GetProductById(id);
@@ -48,8 +46,7 @@ namespace Catalog.Api.Controllers
 
         [HttpGet("categories/{categoryId:Guid}/products")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<Product>))]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
         {
             var products = StaticData.StaticData.GetProductsByCategoryId(categoryId);
@@ -59,8 +56,7 @@ namespace Catalog.Api.Controllers
         [HttpPost("categories/{categoryId:Guid}/products")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        [AllowAnonymous]
+        [Authorize(Roles = "manager")]
         public async Task<ActionResult> CreateAsync(Guid categoryId, CreateProduct productToCreate, CancellationToken cancellationToken = default)
         {
             var category = StaticData.StaticData.GetCategoryById(categoryId);
@@ -84,8 +80,7 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> UpdateAsync(
             Guid categoryId,
             Guid productId,
@@ -130,8 +125,7 @@ namespace Catalog.Api.Controllers
         [HttpDelete("categories/{categoryId:Guid}/products/{productId:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> DeleteAsync(Guid categoryId, Guid productId, CancellationToken cancellationToken = default)
         {
             var product = StaticData.StaticData.GetProductById(productId);

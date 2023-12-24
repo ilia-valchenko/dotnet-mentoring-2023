@@ -25,61 +25,6 @@ public class Startup
     {
         services.AddControllers();
 
-        #region DummyIdentityServer configuration
-
-        //// This authentication handler will automatically fetch the discovery document from IdentityServer on first use.
-        //services.AddAuthentication("Bearer")
-        //    .AddJwtBearer("Bearer", configureOptions =>
-        //    {
-        //        var secretBytes = Encoding.UTF8.GetBytes(Constants.Constants.SecretKey);
-        //        var key = new SymmetricSecurityKey(secretBytes);
-
-        //        // The Resource Server MUST validate an access token
-        //        // and ensure that is has not expired and that its scope
-        //        // covers the requested resource. It generally involves
-        //        // an interaction or coordination between the Resource Server
-        //        // and Authorization Server.
-        //        configureOptions.TokenValidationParameters = new TokenValidationParameters
-        //        {
-        //            ValidIssuer = Constants.Constants.Issuer,
-        //            ValidAudience = Constants.Constants.Audience,
-        //            IssuerSigningKey = key
-        //        };
-        //    });
-
-        //services.AddAuthorization(config =>
-        //{
-        //    var defaultAuthBuilder = new AuthorizationPolicyBuilder();
-
-        //    //var defaultAuthPolicy = defaultAuthBuilder
-        //    //    .RequireAuthenticatedUser()
-        //    //    .RequireClaim(ClaimTypes.DateOfBirth)
-        //    //    .Build();
-
-        //    // Here we override the default policy.
-        //    var defaultAuthPolicy = defaultAuthBuilder
-        //        // Here we usually specify requirements for which we are going
-        //        // to use handlers to validate.
-        //        .AddRequirements(new JwtRequirement())
-        //        // For default authorization we're gonna redirect it to the server.
-        //        .Build();
-
-        //    config.DefaultPolicy = defaultAuthPolicy;
-
-        //    // ****************************************************************
-
-        //    //config.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, "admin"));
-
-        //    //config.AddPolicy("Claim.DoB", policyBuilder =>
-        //    //{
-        //    //    policyBuilder.AddRequireCustomClaimRequirement(ClaimTypes.DateOfBirth);
-        //    //});
-        //});
-
-        #endregion
-
-        #region IdentityServer4 configuration
-
         // OpenID specifies how this communication and validation happen.
         // All the information we need will be discovered in the discovery document.
         services.AddAuthentication("Bearer")
@@ -100,8 +45,6 @@ public class Startup
                     p => p.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()));
-
-        #endregion
 
         services.AddSwaggerGen(option =>
         {

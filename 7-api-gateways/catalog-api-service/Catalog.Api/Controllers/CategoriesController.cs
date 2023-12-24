@@ -22,9 +22,7 @@ namespace Catalog.Api.Controllers
 
         [HttpGet("categories")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<Category>))]
-        //[Authorize] // Now this Authorize attribute will always go to the JwtRequirementHandler.
-        //[Authorize(Roles = "manager, buyer")]
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var claims = User.Claims.ToList();
@@ -35,8 +33,7 @@ namespace Catalog.Api.Controllers
         [HttpGet("categories/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize(Roles = "manager, buyer")]
-        [AllowAnonymous]
+        [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var category = StaticData.StaticData.GetCategoryById(id);
@@ -52,8 +49,7 @@ namespace Catalog.Api.Controllers
         [HttpPost("categories")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize(Roles = "manager")]
-        [AllowAnonymous]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync(CreateCategory categoryToCreate, CancellationToken cancellationToken = default)
         {
             var categoryId = Guid.NewGuid();
@@ -66,18 +62,21 @@ namespace Catalog.Api.Controllers
                 Products = new List<Product>()
             };
 
-            foreach (var createProduct in categoryToCreate.Products)
+            if (categoryToCreate.Products != null && categoryToCreate.Products.Any())
             {
-                category.Products.Add(new Product
+                foreach (var createProduct in categoryToCreate.Products)
                 {
-                    Id = Guid.NewGuid(),
-                    CategoryId = categoryId,
-                    Name = createProduct.Name,
-                    ImageUrlText = createProduct.ImageUrlText,
-                    Description = createProduct.Description,
-                    Amount = createProduct.Amount,
-                    Price = createProduct.Price
-                });
+                    category.Products.Add(new Product
+                    {
+                        Id = Guid.NewGuid(),
+                        CategoryId = categoryId,
+                        Name = createProduct.Name,
+                        ImageUrlText = createProduct.ImageUrlText,
+                        Description = createProduct.Description,
+                        Amount = createProduct.Amount,
+                        Price = createProduct.Price
+                    });
+                }
             }
 
             StaticData.StaticData.CreateCategory(category);
@@ -88,8 +87,7 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize(Roles = "manager")]
-        [AllowAnonymous]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync(Guid id, UpdateCategory categoryToUpdate, CancellationToken cancellationToken = default)
         {
             var category = StaticData.StaticData.GetCategoryById(id);
@@ -115,8 +113,7 @@ namespace Catalog.Api.Controllers
         [HttpDelete("categories/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize(Roles = "manager")]
-        [AllowAnonymous]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             StaticData.StaticData.DeleteCategory(id);

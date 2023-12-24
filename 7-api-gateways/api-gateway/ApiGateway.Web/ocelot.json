@@ -26,7 +26,28 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": [
-          "api-gateway-api"
+          "catalog-api"
+        ]
+      }
+      //"AddHeadersToRequest": {
+      //  "Athorization": "Claims[access_token] > value > |"
+      //}
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/categories",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/categories",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "catalog-api"
         ]
       }
       //"AddHeadersToRequest": {
