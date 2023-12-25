@@ -49,6 +49,9 @@
         "AllowedScopes": [
           "catalog-api"
         ]
+      },
+      "RouteClaimsRequirement": {
+        "role": "manager"
       }
       //"AddHeadersToRequest": {
       //  "Athorization": "Claims[access_token] > value > |"
@@ -65,6 +68,30 @@
       ],
       "UpstreamPathTemplate": "/categories/{id}",
       "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/categories",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/categories",
+      "UpstreamHttpMethod": [ "Patch" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [
+          "catalog-api"
+        ]
+      },
+      "RouteClaimsRequirement": {
+        "role": "manager"
+      }
+      //"AddHeadersToRequest": {
+      //  "Athorization": "Claims[access_token] > value > |"
+      //}
     },
     {
       "DownstreamPathTemplate": "/api/v1/products",
