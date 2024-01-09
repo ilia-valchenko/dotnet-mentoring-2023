@@ -52,6 +52,7 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync(CreateCategory categoryToCreate, CancellationToken cancellationToken = default)
         {
+            var claims = User.Claims.ToList();
             var categoryId = Guid.NewGuid();
 
             var category = new Category

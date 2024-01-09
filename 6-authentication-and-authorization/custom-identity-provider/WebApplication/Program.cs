@@ -94,6 +94,11 @@ public class Program
         userManager.AddClaimAsync(user, new Claim("role", "manager"))
             .GetAwaiter()
             .GetResult();
+
+        // Issue: https://github.com/ThreeMammals/Ocelot/issues/679
+        userManager.AddClaimAsync(user, new Claim("customrole", "manager"))
+            .GetAwaiter()
+            .GetResult();
     }
 
     private static void CreateBuyerUser(UserManager<IdentityUser> userManager)

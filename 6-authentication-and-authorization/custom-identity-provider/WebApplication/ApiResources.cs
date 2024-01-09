@@ -58,7 +58,9 @@ internal static class ApiResources
                 Scopes = { "api-gateway-api" },
                 UserClaims =
                 {
-                    "role"
+                    "role",
+                    // Issue: https://github.com/ThreeMammals/Ocelot/issues/679
+                    "customrole"
                 }
             }
         };

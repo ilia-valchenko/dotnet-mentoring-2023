@@ -29,9 +29,6 @@
           "catalog-api"
         ]
       }
-      //"AddHeadersToRequest": {
-      //  "Athorization": "Claims[access_token] > value > |"
-      //}
     },
     {
       "DownstreamPathTemplate": "/api/v1/categories",
@@ -50,12 +47,16 @@
           "catalog-api"
         ]
       },
+      //"RouteClaimsRequirement": {
+      //  "role": "manager"
+      //},
+      //"RouteClaimsRequirement": {
+      //  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "manager"
+      //},
+      //// Issue: https://github.com/ThreeMammals/Ocelot/issues/679
       "RouteClaimsRequirement": {
-        "role": "manager"
+        "customrole": "manager"
       }
-      //"AddHeadersToRequest": {
-      //  "Athorization": "Claims[access_token] > value > |"
-      //}
     },
     {
       "DownstreamPathTemplate": "/api/v1/categories/{id}",
@@ -86,12 +87,16 @@
           "catalog-api"
         ]
       },
+      //"RouteClaimsRequirement": {
+      //  "role": "manager"
+      //},
+      //"RouteClaimsRequirement": {
+      //  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "manager"
+      //},
+      //// Issue: https://github.com/ThreeMammals/Ocelot/issues/679
       "RouteClaimsRequirement": {
-        "role": "manager"
+        "customrole": "manager"
       }
-      //"AddHeadersToRequest": {
-      //  "Athorization": "Claims[access_token] > value > |"
-      //}
     },
     {
       "DownstreamPathTemplate": "/api/v1/products",
