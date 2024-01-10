@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Text;
 using ApiGateway.Web.Aggregators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -66,6 +67,8 @@ builder.Services
         x.WithDictionaryHandle();
     });
 
+//builder.Services.AddSwaggerForOcelot(builder.Configuration);
+
 //builder.Services.AddSwaggerGen(option =>
 //{
 //    option.SwaggerDoc("v1", new OpenApiInfo { Title = "API Gateway", Version = "v1" });
@@ -96,11 +99,6 @@ builder.Services
 //    });
 //});
 
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-//builder.Services.AddSwaggerForOcelot(builder.Configuration);
-
 var app = builder.Build();
 
 if (builder.Environment.IsDevelopment())
@@ -108,20 +106,12 @@ if (builder.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-//app.UseSwagger();
-//app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Gateway"));
-
-//app.UseSwagger();
-//app.UseSwaggerUI();
-//app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Gateway"));
-
-//app.UseSwaggerForOcelotUI(options =>
-//{
-//    options.PathToSwaggerGenerator = "/swagger/docs";
-//});
-
 app.UseRouting();
 app.UseAuthorization();
 app.UseOcelot().Wait();
+
+//app.UseSwaggerForOcelotUI(opt => {
+//    opt.PathToSwaggerGenerator = "/swagger/docs";
+//});
 
 app.Run();

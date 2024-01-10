@@ -11,6 +11,7 @@
       ],
       "UpstreamPathTemplate": "/token",
       "UpstreamHttpMethod": [ "Post" ]
+      //"SwaggerKey": "identityserver"
     },
     {
       "DownstreamPathTemplate": "/api/v1/categories",
@@ -31,7 +32,8 @@
       },
       "FileCacheOptions": {
         "TtlSeconds": 60
-      }
+      },
+      "SwaggerKey": "catalog"
     },
     {
       "DownstreamPathTemplate": "/api/v1/categories",
@@ -164,5 +166,17 @@
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7123"
-  }
+  },
+  "SwaggerEndPoints": [
+    {
+      "Key": "catalog",
+      "Config": [
+        {
+          "Name": "Catalog API",
+          "Version": "v1",
+          "Url": "http://localhost:5000/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
 }
