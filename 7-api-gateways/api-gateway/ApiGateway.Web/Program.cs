@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MMLib.SwaggerForOcelot.DependencyInjection;
+using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Values;
@@ -59,8 +60,11 @@ builder.Services
 // See: https://ocelot.readthedocs.io/en/latest/features/dependencyinjection.html
 builder.Services
     .AddOcelot()
-    .AddSingletonDefinedAggregator<ManufacturerProductAggregator>();
-//.AddTransientDefinedAggregator<ManufacturerProductAggregator>();
+    .AddSingletonDefinedAggregator<ManufacturerProductAggregator>()
+    .AddCacheManager(x =>
+    {
+        x.WithDictionaryHandle();
+    });
 
 //builder.Services.AddSwaggerGen(option =>
 //{

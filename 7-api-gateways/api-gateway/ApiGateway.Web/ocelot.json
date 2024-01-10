@@ -28,6 +28,9 @@
         "AllowedScopes": [
           "catalog-api"
         ]
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 60
       }
     },
     {
