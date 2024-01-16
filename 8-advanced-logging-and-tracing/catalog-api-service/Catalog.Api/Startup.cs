@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Catalog.Api.AuthorizationRequirements;
+using CorrelationId.DependencyInjection;
+using CorrelationId;
 
 namespace Catalog.Api;
 
@@ -81,6 +83,15 @@ public class Startup
         services.AddHttpClient()
             .AddHttpContextAccessor(); // It will allow us to get an access to the HttpContext.
 
+        services.AddDefaultCorrelationId(cfg =>
+        {
+            cfg.UpdateTraceIdentifier = true;
+            cfg.IncludeInResponse = true;
+            cfg.AddToLoggingScope = true;
+            cfg.RequestHeader = "X-Correlation-ID";
+            cfg.ResponseHeader = "X-Correlation-ID";
+        });
+
         services.AddScoped<IAuthorizationHandler, JwtRequirementHandler>();
     }
 
@@ -96,6 +107,7 @@ public class Startup
 
         app.UseCors("AllowAll");
 
+        app.UseCorrelationId();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
