@@ -9,8 +9,17 @@ namespace ApiGateway.Web.Aggregators;
 
 public class ManufacturerProductAggregator : IDefinedAggregator
 {
+    private readonly ILogger<ManufacturerProductAggregator> _logger;
+
+    public ManufacturerProductAggregator(ILogger<ManufacturerProductAggregator> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task<DownstreamResponse> Aggregate(List<HttpContext> responses)
     {
+        _logger.LogInformation("$$$$$$$$$$$$$$$$$$$$$$$$$ Start doing aggregation $$$$$$$$$$$$$$$$$$$$$$$$$");
+
         var manufacturers = await responses[0].Items.DownstreamResponse().Content.ReadFromJsonAsync<List<Manufacturer>>();
         var products = await responses[1].Items.DownstreamResponse().Content.ReadFromJsonAsync<List<Product>>();
 

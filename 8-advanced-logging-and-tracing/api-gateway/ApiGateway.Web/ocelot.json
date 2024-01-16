@@ -11,7 +11,6 @@
       ],
       "UpstreamPathTemplate": "/token",
       "UpstreamHttpMethod": [ "Post" ]
-      //"SwaggerKey": "identityserver"
     },
     {
       "DownstreamPathTemplate": "/api/v1/categories",
@@ -29,11 +28,7 @@
         "AllowedScopes": [
           "catalog-api"
         ]
-      },
-      "FileCacheOptions": {
-        "TtlSeconds": 60
-      },
-      "SwaggerKey": "catalog"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/categories",
@@ -52,12 +47,6 @@
           "catalog-api"
         ]
       },
-      //"RouteClaimsRequirement": {
-      //  "role": "manager"
-      //},
-      //"RouteClaimsRequirement": {
-      //  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "manager"
-      //},
       //// Issue: https://github.com/ThreeMammals/Ocelot/issues/679
       "RouteClaimsRequirement": {
         "customrole": "manager"
@@ -92,12 +81,6 @@
           "catalog-api"
         ]
       },
-      //"RouteClaimsRequirement": {
-      //  "role": "manager"
-      //},
-      //"RouteClaimsRequirement": {
-      //  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "manager"
-      //},
       //// Issue: https://github.com/ThreeMammals/Ocelot/issues/679
       "RouteClaimsRequirement": {
         "customrole": "manager"
@@ -166,17 +149,5 @@
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7123"
-  },
-  "SwaggerEndPoints": [
-    {
-      "Key": "catalog",
-      "Config": [
-        {
-          "Name": "Catalog API",
-          "Version": "v1",
-          "Url": "http://localhost:5000/swagger/v1/swagger.json"
-        }
-      ]
-    }
-  ]
+  }
 }
