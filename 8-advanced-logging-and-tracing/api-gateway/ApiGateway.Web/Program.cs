@@ -88,7 +88,18 @@ public class Program
                     .AddJsonFile("ocelot.json", false, true)
                     .AddEnvironmentVariables();
             })
-            .UseSerilog((context, services, loggerConfiguration) => loggerConfiguration.WriteTo.Console())
+            //.UseSerilog((context, services, loggerConfiguration) => loggerConfiguration.WriteTo.Console())
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddSimpleConsole(options =>
+                {
+                    options.TimestampFormat = "'['yyyy'-'MM'-'dd HH':'mm':'ss']' ";
+                    options.UseUtcTimestamp = true;
+                    options.IncludeScopes = true;
+                    options.SingleLine = true;
+                });
+            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
