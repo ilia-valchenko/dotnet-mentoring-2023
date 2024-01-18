@@ -1,6 +1,5 @@
 ﻿using ApiGateway.Web.Aggregators;
 using CorrelationId;
-using CorrelationId.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.Cache.CacheManager;
@@ -52,14 +51,21 @@ public class Startup
                 x.WithDictionaryHandle();
             });
 
-        services.AddDefaultCorrelationId(cfg =>
-        {
-            cfg.UpdateTraceIdentifier = true;
-            cfg.IncludeInResponse = true;
-            cfg.AddToLoggingScope = true;
-            cfg.RequestHeader = "X-Correlation-ID";
-            cfg.ResponseHeader = "X-Correlation-ID";
-        });
+        //services.AddDefaultCorrelationId(cfg =>
+        //{
+        //    cfg.UpdateTraceIdentifier = true;
+        //    cfg.IncludeInResponse = true;
+        //    cfg.AddToLoggingScope = true;
+        //    cfg.RequestHeader = "x-correlation-id";
+        //    cfg.ResponseHeader = "x-correlation-id";
+        //});
+
+        //services.AddApplicationInsights();
+        //services.AddApplicationInsightsTelemetry(Configuration);
+
+        // It builds a TelemetryConfiguration instance with the connection string we configured.
+        // The method also registers a singleton of IOptions<TelemetryConfiguration> that can be resolved from an IServiceProvider.
+        services.AddApplicationInsightsTelemetry();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -69,9 +75,14 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        //// Obsolete
+        //app.UseApplicationInsightsRequestTelemetry();
+        //app.UseApplicationInsightsExceptionTelemetry();
+
         app.UseCorrelationId();
         app.UseRouting();
         app.UseAuthorization();
         app.UseOcelot().Wait();
+        
     }
 }
