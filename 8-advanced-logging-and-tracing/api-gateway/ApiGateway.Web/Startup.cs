@@ -60,9 +60,7 @@ public class Startup
         //    cfg.ResponseHeader = "x-correlation-id";
         //});
 
-        //services.AddApplicationInsights();
-        //services.AddApplicationInsightsTelemetry(Configuration);
-
+        // IMPORTANT!
         // It builds a TelemetryConfiguration instance with the connection string we configured.
         // The method also registers a singleton of IOptions<TelemetryConfiguration> that can be resolved from an IServiceProvider.
         services.AddApplicationInsightsTelemetry();
