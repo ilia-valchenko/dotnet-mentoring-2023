@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Serilog;
 
 namespace ApiGateway.Web;
 
@@ -19,7 +20,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        //Configuration.AddJsonFile("ocelot.json", false, true);
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -75,14 +75,14 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        //// Obsolete
-        //app.UseApplicationInsightsRequestTelemetry();
-        //app.UseApplicationInsightsExceptionTelemetry();
+        //app.UseCorrelationId();
 
-        app.UseCorrelationId();
+        //// This method will register the request logging middleware, and thus should be called early,
+        //// before registering other middleware and handlers such as MVC, otherwise it will not be able to log them.
+        //app.UseSerilogRequestLogging();
+
         app.UseRouting();
         app.UseAuthorization();
         app.UseOcelot().Wait();
-        
     }
 }
