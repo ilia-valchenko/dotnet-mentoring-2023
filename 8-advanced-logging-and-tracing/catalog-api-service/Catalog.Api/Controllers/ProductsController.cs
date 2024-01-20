@@ -25,6 +25,8 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetAsync([FromQuery]Guid? manufacturerId, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to get a list of all products.");
+
             IEnumerable<Product> products = StaticData.StaticData.GetAllProducts();
 
             if (manufacturerId != null)
@@ -40,6 +42,8 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information($"[Catalog API] Starting to get a single product by id: '{id.ToString()}'.");
+
             var product = StaticData.StaticData.GetProductById(id);
             return Ok(product);
         }
@@ -49,6 +53,8 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information($"[Catalog API] Starting to get a list of products by category id: '{categoryId.ToString()}'.");
+
             var products = StaticData.StaticData.GetProductsByCategoryId(categoryId);
             return Ok(products);
         }
@@ -59,6 +65,15 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<ActionResult> CreateAsync(Guid categoryId, CreateProduct productToCreate, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to create a new product. " +
+                $"CategoryId: '{categoryId.ToString()}'. " +
+                $"ManufacturerId: '{productToCreate.ManufacturerId}'. " +
+                $"Name: '{productToCreate.Name}'. " +
+                $"Description: '{productToCreate.Description}'. " +
+                $"ImageUrl: '{productToCreate.ImageUrlText}'. " +
+                $"Price: '{productToCreate.Price}'. " +
+                $"Amount: '{productToCreate.Amount}'.");
+
             var category = StaticData.StaticData.GetCategoryById(categoryId);
 
             category.Products.Add(new Product
@@ -87,6 +102,15 @@ namespace Catalog.Api.Controllers
             UpdateProduct productToUpdate,
             CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to update an existing product. " +
+                $"ProductId: '{productId.ToString()}'. " +
+                $"CategoryId: '{categoryId.ToString()}'. " +
+                $"NewName: '{productToUpdate.Name}'. " +
+                $"NewDescription: '{productToUpdate.Description}'. " +
+                $"NewImageUrlL: '{productToUpdate.ImageUrlText}'. " +
+                $"NewPrice: '{productToUpdate.Price}'. " +
+                $"NewAmount: '{productToUpdate.Amount}'.");
+
             var product = StaticData.StaticData.GetProductById(productId);
 
             if (productToUpdate.ManufacturerId != null)
@@ -128,6 +152,10 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> DeleteAsync(Guid categoryId, Guid productId, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to delete an existing product. " +
+                $"ProductId: '{productId.ToString()}'. " +
+                $"CategoryId: '{categoryId.ToString()}'.");
+
             var product = StaticData.StaticData.GetProductById(productId);
             var category = StaticData.StaticData.GetCategoryById(categoryId);
 

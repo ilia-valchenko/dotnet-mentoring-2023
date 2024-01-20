@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Catalog.Api.AuthorizationRequirements;
 using CorrelationId.DependencyInjection;
 using CorrelationId;
+using Serilog;
 
 namespace Catalog.Api;
 
@@ -83,16 +84,21 @@ public class Startup
         services.AddHttpClient()
             .AddHttpContextAccessor(); // It will allow us to get an access to the HttpContext.
 
-        services.AddDefaultCorrelationId(cfg =>
-        {
-            cfg.UpdateTraceIdentifier = true;
-            cfg.IncludeInResponse = true;
-            cfg.AddToLoggingScope = true;
-            cfg.RequestHeader = "X-Correlation-ID";
-            cfg.ResponseHeader = "X-Correlation-ID";
-        });
+        //services.AddDefaultCorrelationId(cfg =>
+        //{
+        //    cfg.UpdateTraceIdentifier = true;
+        //    cfg.IncludeInResponse = true;
+        //    cfg.AddToLoggingScope = true;
+        //    cfg.RequestHeader = "X-Correlation-ID";
+        //    cfg.ResponseHeader = "X-Correlation-ID";
+        //});
 
         services.AddScoped<IAuthorizationHandler, JwtRequirementHandler>();
+
+        // IMPORTANT!
+        // It builds a TelemetryConfiguration instance with the connection string we configured.
+        // The method also registers a singleton of IOptions<TelemetryConfiguration> that can be resolved from an IServiceProvider.
+        services.AddApplicationInsightsTelemetry();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,7 +113,12 @@ public class Startup
 
         app.UseCors("AllowAll");
 
-        app.UseCorrelationId();
+        //app.UseCorrelationId();
+
+        // This method will register the request logging middleware, and thus should be called early,
+        // before registering other middleware and handlers such as MVC, otherwise it will not be able to log them.
+        app.UseSerilogRequestLogging();
+
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();

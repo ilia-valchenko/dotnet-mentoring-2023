@@ -25,6 +25,8 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to get a list of all categories.");
+
             var claims = User.Claims.ToList();
             var categories = StaticData.StaticData.GetAllCategories();
             return Ok(categories);
@@ -36,6 +38,8 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager, buyer")]
         public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information($"[Catalog API] Starting to get a single category by id: '{id.ToString()}'.");
+
             var category = StaticData.StaticData.GetCategoryById(id);
 
             if (category == null)
@@ -52,6 +56,10 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync(CreateCategory categoryToCreate, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to create a new category. " +
+                $"Name: '{categoryToCreate.Name}'. " +
+                $"ImageUrl: '{categoryToCreate.ImageUrlText}'.");
+
             var claims = User.Claims.ToList();
             var categoryId = Guid.NewGuid();
 
@@ -91,6 +99,11 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync(Guid id, UpdateCategory categoryToUpdate, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to update an existing category. " +
+                $"CategoryId: '{id.ToString()}'. " +
+                $"NewName: '{categoryToUpdate.Name}'. " +
+                $"ImageUrl: '{categoryToUpdate.ImageUrlText}'.");
+
             var category = StaticData.StaticData.GetCategoryById(id);
 
             if (categoryToUpdate.ParentCategoryId != null)
@@ -117,6 +130,9 @@ namespace Catalog.Api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[Catalog API] Starting to delete an existing category. " +
+                $"CategoryId: '{id.ToString()}'.");
+
             StaticData.StaticData.DeleteCategory(id);
             return new OkResult();
         }

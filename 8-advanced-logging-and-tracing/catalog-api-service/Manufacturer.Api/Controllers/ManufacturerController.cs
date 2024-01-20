@@ -13,6 +13,8 @@ public class ManufacturerController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken = default)
     {
+        Serilog.Log.Information("[Manufacturer API] Starting to get a list of all manufacturers.");
+
         var claims = User.Claims.ToList();
         var manufacturers = StaticData.StaticData.GetAllManufacturer();
         return Ok(manufacturers);
@@ -24,6 +26,8 @@ public class ManufacturerController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync(Guid id, CancellationToken cancellationToken = default)
     {
+        Serilog.Log.Information($"[Manufacturer API] Starting to get a single manufacturer by id: '{id.ToString()}'.");
+
         var claims = User.Claims.ToList();
         var manufacturer = StaticData.StaticData.GetManufacturerById(id);
         return Ok(manufacturer);

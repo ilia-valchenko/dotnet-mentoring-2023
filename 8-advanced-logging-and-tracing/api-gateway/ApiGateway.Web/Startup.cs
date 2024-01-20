@@ -75,9 +75,9 @@ public class Startup
 
         //app.UseCorrelationId();
 
-        //// This method will register the request logging middleware, and thus should be called early,
-        //// before registering other middleware and handlers such as MVC, otherwise it will not be able to log them.
-        //app.UseSerilogRequestLogging();
+        // This method will register the request logging middleware, and thus should be called early,
+        // before registering other middleware and handlers such as MVC, otherwise it will not be able to log them.
+        app.UseSerilogRequestLogging();
 
         app.UseRouting();
         app.UseAuthorization();
