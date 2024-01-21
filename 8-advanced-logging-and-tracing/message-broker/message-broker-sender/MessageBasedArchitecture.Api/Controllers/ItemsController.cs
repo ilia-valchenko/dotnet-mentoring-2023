@@ -34,9 +34,17 @@ namespace MessageBasedArchitecture.Api.Controllers
         {
             Serilog.Log.Information($"[MessageSender API] Starting to update existing item. Id: '{id.ToString()}'.");
 
+            var correlationId = Guid.Empty;
+            string correlationIdString = HttpContext.Request.Headers["x-correlation-id"];
+
+            if (!string.IsNullOrWhiteSpace(correlationIdString))
+            {
+                correlationId = Guid.Parse(correlationIdString);
+            }
+
             try
             {
-                await _service.UpdateAsync(id, updateItem, cancellationToken);
+                await _service.UpdateAsync(id, updateItem, correlationId, cancellationToken);
                 return Ok();
             }
             catch (ValueNotValidException valueNotValidException)

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Events;
 
-public class PriceChanged
+public class PriceChanged : BaseEvent
 {
     public Guid Id { get; set; }
 

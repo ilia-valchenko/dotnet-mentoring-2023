@@ -26,7 +26,11 @@ public class Service : IService
         return _mapper.Map<IEnumerable<Item>>(items);
     }
 
-    public async Task UpdateAsync(Guid id, UpdateItem updateItem, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(
+        Guid id,
+        UpdateItem updateItem,
+        Guid correlationId,
+        CancellationToken cancellationToken = default)
     {
         var item = await _repository.GetByIdAsync(id, cancellationToken);
 
@@ -47,7 +51,8 @@ public class Service : IService
         await _mediator.Publish(new PriceChanged
         {
             Id = item.Id,
-            Price = item.Price
+            Price = item.Price,
+            CorrelationId = correlationId
         }, cancellationToken);
     }
 }

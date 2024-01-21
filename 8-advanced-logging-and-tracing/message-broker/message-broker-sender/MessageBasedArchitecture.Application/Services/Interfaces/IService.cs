@@ -6,5 +6,9 @@ public interface IService
 {
     Task<IEnumerable<Item>> GetAllAsync(CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(Guid id, UpdateItem updateItem, CancellationToken cancellationToken = default);
+    Task UpdateAsync(
+        Guid id,
+        UpdateItem updateItem,
+        Guid correlationId,
+        CancellationToken cancellationToken = default);
 }

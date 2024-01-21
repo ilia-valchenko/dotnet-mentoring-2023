@@ -1,18 +1,17 @@
 using Domain.Events;
 using MessageBasedArchitecture.Application;
 using Newtonsoft.Json;
+using Serilog.Context;
 
 namespace MessageBasedArchitecture.Worker;
 
 public class Worker : BackgroundService
 {
     private readonly IMessageBroker messageBroker;
-    private readonly ILogger<Worker> _logger;
 
-    public Worker(IMessageBroker messageBroker, ILogger<Worker> logger)
+    public Worker(IMessageBroker messageBroker)
     {
         this.messageBroker = messageBroker;
-        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,10 +27,14 @@ public class Worker : BackgroundService
                     return;
                 }
 
-                _logger.LogInformation($"A new message has been received. Serialized message: {JsonConvert.SerializeObject(message)}");
+                using (LogContext.PushProperty("CorrelationId", message.CorrelationId.ToString()))
+                {
+                    Serilog.Log.Information(
+                        $"[MessageBasedArchitecture Worker] A new message has been received. Serialized message: {JsonConvert.SerializeObject(message)}.");
 
-                // TODO: Do something. The app should react to the message.
-                // According to the homework the app should update something in the basket.
+                    // TODO: Do something. The app should react to the message.
+                    // According to the homework the app should update something in the basket.
+                }
             });
         }
     }
