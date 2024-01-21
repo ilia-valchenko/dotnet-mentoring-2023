@@ -29,11 +29,15 @@ public class StaticData
 
     public static IList<Models.Manufacturer> GetAllManufacturer()
     {
+        Serilog.Log.Information("[Catalog API - ManufacturerRepository] Get all manufacturers.");
+
         return _manufacturers;
     }
 
     public static Models.Manufacturer GetManufacturerById(Guid id)
     {
+        Serilog.Log.Information($"[Catalog API - ManufacturerRepository] Get manufacturer by id: '{id.ToString()}'.");
+
         return _manufacturers.SingleOrDefault(m => m.Id == id);
     }
 }

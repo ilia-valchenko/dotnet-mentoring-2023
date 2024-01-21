@@ -53,11 +53,15 @@ namespace Catalog.Api.StaticData
 
         public static IList<Category> GetAllCategories()
         {
+            Serilog.Log.Information("[Catalog API - CategoryRepository] Get all categories.");
+
             return _categories;
         }
 
         public static IList<Product> GetAllProducts()
         {
+            Serilog.Log.Information("[Catalog API - ProductRepository] Get all products.");
+
             var products = new List<Product>();
 
             foreach (var category in _categories)
@@ -70,28 +74,38 @@ namespace Catalog.Api.StaticData
 
         public static Product GetProductById(Guid id)
         {
+            Serilog.Log.Information($"[Catalog API - ProductRepository] Get product by id: '{id.ToString()}'.");
+
             var products = GetAllProducts();
             return products.SingleOrDefault(p => p.Id == id);
         }
 
         public static IList<Product> GetProductsByCategoryId(Guid categoryId)
         {
+            Serilog.Log.Information($"[Catalog API - ProductRepository] Get products by category id: '{categoryId.ToString()}'.");
+
             var category = GetCategoryById(categoryId);
             return category.Products;
         }
 
         public static Category GetCategoryById(Guid id)
         {
+            Serilog.Log.Information($"[Catalog API - CategoryRepository] Get category by id: '{id.ToString()}'.");
+
             return _categories.SingleOrDefault(c => c.Id == id);
         }
 
         public static void CreateCategory(Category category)
         {
+            Serilog.Log.Information($"[Catalog API - CategoryRepository] Create a new category.");
+
             _categories.Add(category);
         }
 
         public static void DeleteCategory(Guid id)
         {
+            Serilog.Log.Information($"[Catalog API - CategoryRepository] Delete existing category.");
+
             _categories.Remove(_categories.Single(c => c.Id == id));
         }
 
