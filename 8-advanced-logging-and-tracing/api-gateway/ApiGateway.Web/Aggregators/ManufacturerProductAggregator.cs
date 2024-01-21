@@ -11,7 +11,7 @@ public class ManufacturerProductAggregator : IDefinedAggregator
 {
     public async Task<DownstreamResponse> Aggregate(List<HttpContext> responses)
     {
-        Serilog.Log.Information("Start doing aggregation.");
+        Serilog.Log.Information("[API Gateway] Start doing aggregation.");
 
         var manufacturers = await responses[0].Items.DownstreamResponse().Content.ReadFromJsonAsync<List<Manufacturer>>();
         var products = await responses[1].Items.DownstreamResponse().Content.ReadFromJsonAsync<List<Product>>();
