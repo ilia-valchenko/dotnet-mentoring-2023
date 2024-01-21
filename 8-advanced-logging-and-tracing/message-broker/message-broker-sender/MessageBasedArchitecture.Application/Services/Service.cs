@@ -40,6 +40,10 @@ public class Service : IService
 
         await _repository.UpdateAsync(item, cancellationToken);
 
+        Serilog.Log.Information("[MessageSender API] Starting to publish a new message to the message broker. " +
+            $"Id: '{item.Id.ToString()}'. " +
+            $"Price: '{item.Price}'.");
+
         await _mediator.Publish(new PriceChanged
         {
             Id = item.Id,

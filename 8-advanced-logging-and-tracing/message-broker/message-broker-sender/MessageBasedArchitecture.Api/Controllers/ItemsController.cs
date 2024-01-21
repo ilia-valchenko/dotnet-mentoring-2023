@@ -10,18 +10,18 @@ namespace MessageBasedArchitecture.Api.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IService _service;
-        private readonly ILogger<ItemsController> _logger;
 
-        public ItemsController(IService service, ILogger<ItemsController> logger)
+        public ItemsController(IService service)
         {
             _service = service;
-            _logger = logger;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Item>))]
         public async Task<ActionResult<IEnumerable<Item>>> GetAllAsync(CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information("[MessageSender API] Starting to get a list of all items.");
+
             var items = await _service.GetAllAsync(cancellationToken);
             return Ok(items);
         }
@@ -30,8 +30,10 @@ namespace MessageBasedArchitecture.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Item>>> GetAllAsync(Guid id, UpdateItem updateItem, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<Item>>> UpdateAsync(Guid id, UpdateItem updateItem, CancellationToken cancellationToken = default)
         {
+            Serilog.Log.Information($"[MessageSender API] Starting to update existing item. Id: '{id.ToString()}'.");
+
             try
             {
                 await _service.UpdateAsync(id, updateItem, cancellationToken);
