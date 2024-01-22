@@ -46,13 +46,27 @@ public class Service : IService
 
         Serilog.Log.Information("[MessageSender API] Starting to publish a new message to the message broker. " +
             $"Id: '{item.Id.ToString()}'. " +
-            $"Price: '{item.Price}'.");
+            $"Price: '{item.Price}'. " +
+            $"CorrelationId: '{correlationId}'.");
 
-        await _mediator.Publish(new PriceChanged
+        try
         {
-            Id = item.Id,
-            Price = item.Price,
-            CorrelationId = correlationId
-        }, cancellationToken);
+            await _mediator.Publish(new PriceChanged
+            {
+                Id = item.Id,
+                Price = item.Price,
+                CorrelationId = correlationId
+            }, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Serilog.Log.Error("[MessageSender API] Failed to publish a new message to the message broker. " +
+            $"Id: '{item.Id.ToString()}'. " +
+            $"Price: '{item.Price}'. " +
+            $"CorrelationId: '{correlationId}'.",
+            ex);
+
+            throw;
+        }
     }
 }
