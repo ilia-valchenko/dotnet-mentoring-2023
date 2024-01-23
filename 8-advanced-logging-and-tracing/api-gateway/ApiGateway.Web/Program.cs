@@ -2,6 +2,7 @@ using ApiGateway.Web;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Options;
 using Serilog;
+using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Settings.Configuration;
 
@@ -73,6 +74,9 @@ public class Program
             .Enrich.FromLogContext()
             .Enrich.WithCorrelationIdHeader("x-correlation-id")
             .Enrich.WithExceptionDetails();
+
+        //// Note: read-only.
+        //loggerConfiguration.MinimumLevel = LogEventLevel.Information;
 
         var readerOptions = new ConfigurationReaderOptions
         {
